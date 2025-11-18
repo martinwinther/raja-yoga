@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import "./globals.css";
 import { ThemeProvider } from "../components/theme-provider";
 import { ThemeToggle } from "../components/theme-toggle";
+import { MainNav } from "../components/main-nav";
 
 export const metadata: Metadata = {
   title: "52 Weeks of Raja Yoga",
@@ -25,29 +25,7 @@ export default function RootLayout({
                   <span className="text-sm font-semibold tracking-wide text-[hsl(var(--text))]">
                     52 Weeks of Raja Yoga
                   </span>
-                  <nav className="hidden gap-4 text-sm text-[hsl(var(--muted))] sm:flex">
-                    <Link href="/" className="hover:text-[hsl(var(--text))]">
-                      Home
-                    </Link>
-                    <Link
-                      href="/progress"
-                      className="hover:text-[hsl(var(--text))]"
-                    >
-                      Progress
-                    </Link>
-                    <Link
-                      href="/journal"
-                      className="hover:text-[hsl(var(--text))]"
-                    >
-                      Journal
-                    </Link>
-                    <Link
-                      href="/settings"
-                      className="hover:text-[hsl(var(--text))]"
-                    >
-                      Settings
-                    </Link>
-                  </nav>
+                  <MainNav />
                 </div>
                 <div className="flex items-center gap-2">
                   <ThemeToggle />

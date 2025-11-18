@@ -1,13 +1,20 @@
+import { PageHeader } from "../../components/page-header";
+import { GlassCard } from "../../components/glass-card";
+
 export default function SettingsPage() {
   return (
     <div className="space-y-6">
-      <section className="glass-card rounded-2xl p-6">
-        <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
-        <p className="mt-2 text-sm text-[hsl(var(--muted))]">
-          This is the Settings page. We&apos;ll add start date adjustment and
-          reset options here later.
+      <PageHeader
+        title="Settings"
+        subtitle="Adjust your start date, reset your journey, and export data."
+      />
+
+      <GlassCard>
+        <p className="text-sm text-[hsl(var(--muted))]">
+          We&apos;ll add start date adjustment, reset options, and data export
+          here once the tracking logic is in place.
         </p>
-      </section>
+      </GlassCard>
     </div>
   );
 }

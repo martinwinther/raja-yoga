@@ -1,22 +1,38 @@
+import { PageHeader } from "../components/page-header";
+import { GlassCard } from "../components/glass-card";
+
 export default function HomePage() {
   return (
     <div className="space-y-6">
-      <section className="glass-card rounded-2xl p-6">
-        <h1 className="text-2xl font-semibold tracking-tight">
-          52 Weeks of Raja Yoga
-        </h1>
+      <PageHeader
+        title="Your Raja Yoga Journey"
+        subtitle="A calm, structured 52-week program based on Patañjali&apos;s Yoga Sūtras. One weekly theme, tiny daily actions, and space to reflect."
+      />
+
+      <GlassCard>
+        <h2 className="text-sm font-medium uppercase tracking-wide text-[hsl(var(--muted))]">
+          Overview
+        </h2>
         <p className="mt-2 text-sm text-[hsl(var(--muted))]">
-          A calm, structured one-year journey through Raja Yoga, based on
-          Patañjali&apos;s Yoga Sūtras. We&apos;ll build the weekly journey
-          overview here in later steps.
+          You&apos;ll move through 52 weekly themes covering the nature of mind,
+          yama and niyama, body and breath, and meditation. Each day you&apos;ll
+          mark whether you practiced and capture a short note.
         </p>
-      </section>
-      <section className="glass-card rounded-2xl p-6">
-        <p className="text-sm text-[hsl(var(--muted))]">
-          Use the navigation above to explore the upcoming pages: Progress,
-          Journal, and Settings.
+        <p className="mt-3 text-sm text-[hsl(var(--muted))]">
+          We&apos;ll add your week-by-week journey grid here in a later step.
         </p>
-      </section>
+      </GlassCard>
+
+      <GlassCard>
+        <h2 className="text-sm font-medium uppercase tracking-wide text-[hsl(var(--muted))]">
+          Next steps
+        </h2>
+        <p className="mt-2 text-sm text-[hsl(var(--muted))]">
+          For now, you can explore the placeholder pages via the navigation
+          above. In upcoming steps we&apos;ll add your start date, progress
+          tracking, daily notes, and weekly reviews.
+        </p>
+      </GlassCard>
     </div>
   );
 }
