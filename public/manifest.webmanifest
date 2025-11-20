@@ -1,0 +1,24 @@
+{
+  "name": "52 Weeks of Raja Yoga",
+  "short_name": "Raja Yoga",
+  "description": "A 52-week guided journey through the Yoga Sūtras with daily micro-practices and notes.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#050814",
+  "theme_color": "#111827",
+  "icons": [
+    {
+      "src": "/icons/raja-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icons/raja-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
+

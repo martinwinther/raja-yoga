@@ -10,10 +10,25 @@ import { AppStatusProvider } from "../context/app-status-context";
 
 export const metadata: Metadata = {
   title: "52 Weeks of Raja Yoga",
-  description: "A 52-week Raja Yoga practice journey based on the Yoga Sūtras.",
+  description:
+    "A 52-week guided journey through the Yoga Sūtras with daily micro-practices, notes, and progress tracking.",
+  manifest: "/manifest.webmanifest",
   icons: {
     icon: "/icon.svg",
+    apple: "/icons/raja-192.png",
   },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Raja Yoga",
+  },
+};
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover" as const,
+  themeColor: "#111827",
 };
 
 export default function RootLayout({
