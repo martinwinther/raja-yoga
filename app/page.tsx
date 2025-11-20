@@ -46,26 +46,28 @@ export default function HomePage() {
           subtitle="A guided year-long journey through the Yoga Sūtras, with one small practice each day."
         />
         <GlassCard>
-          <h2 className="text-sm font-medium text-[hsl(var(--text))]">
-            Start your free month
-          </h2>
-          <p className="mt-2 text-sm text-[hsl(var(--muted))]">
-            Create a free account to begin a 1-month trial. You&apos;ll get a clear
-            weekly theme, a daily micro-practice, and space to track notes and
-            reflections as you move through the 52 weeks.
-          </p>
-          <div className="mt-4 flex flex-wrap gap-3">
-            <Link href="/auth" className="btn-primary">
-              Create account
-            </Link>
-            <Link href="/auth" className="btn-ghost text-xs">
-              Already have an account? Log in
-            </Link>
+          <div className="-mx-6 rounded-lg bg-white/6 px-6 py-4 shadow-[0_4px_12px_rgba(0,0,0,0.3)] backdrop-blur-sm transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_6px_16px_rgba(0,0,0,0.4)]">
+            <h2 className="text-sm font-medium text-[hsl(var(--text))]">
+              Start your free month
+            </h2>
+            <p className="mt-2 text-sm text-[hsl(var(--muted))]">
+              Create a free account to begin a 1-month trial. You&apos;ll get a clear
+              weekly theme, a daily micro-practice, and space to track notes and
+              reflections as you move through the 52 weeks.
+            </p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <Link href="/auth" className="btn-primary">
+                Create account
+              </Link>
+              <Link href="/auth" className="btn-ghost text-xs">
+                Already have an account? Log in
+              </Link>
+            </div>
+            <p className="mt-3 text-[10px] text-[hsl(var(--muted))]">
+              No spam. Your email is used only to save your progress and manage your
+              subscription status.
+            </p>
           </div>
-          <p className="mt-3 text-[10px] text-[hsl(var(--muted))]">
-            No spam. Your email is used only to save your progress and manage your
-            subscription status.
-          </p>
         </GlassCard>
       </div>
     );

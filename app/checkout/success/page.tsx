@@ -47,23 +47,25 @@ export default function CheckoutSuccessPage() {
       />
 
       <GlassCard>
-        {error ? (
-          <p className="text-sm text-red-300">{error}</p>
-        ) : (
-          <p className="text-sm text-[hsl(var(--muted))]">
-            Your account has been upgraded. You now have full access to mark
-            new practice, edit notes, and continue your journey beyond the
-            free trial.
-          </p>
-        )}
+        <div className="-mx-6 rounded-lg bg-white/6 px-6 py-4 shadow-[0_4px_12px_rgba(0,0,0,0.3)] backdrop-blur-sm transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_6px_16px_rgba(0,0,0,0.4)]">
+          {error ? (
+            <p className="text-sm text-red-300">{error}</p>
+          ) : (
+            <p className="text-sm text-[hsl(var(--muted))]">
+              Your account has been upgraded. You now have full access to mark
+              new practice, edit notes, and continue your journey beyond the
+              free trial.
+            </p>
+          )}
 
-        <div className="mt-4 flex flex-wrap gap-3">
-          <Link href="/" className="btn-primary">
-            Go to Home
-          </Link>
-          <Link href="/settings" className="btn-ghost text-xs">
-            View subscription in Settings
-          </Link>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link href="/" className="btn-primary">
+              Go to Home
+            </Link>
+            <Link href="/settings" className="btn-ghost text-xs">
+              View subscription in Settings
+            </Link>
+          </div>
         </div>
       </GlassCard>
     </div>
