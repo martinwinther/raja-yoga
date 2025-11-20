@@ -30,7 +30,7 @@ export default function HomePage() {
       {hasStartDate ? (
         current && firstWeek ? (
           <GlassCard>
-            <div className="-mx-6 rounded-lg bg-white/7 px-6 py-3 shadow-[0_4px_12px_rgba(0,0,0,0.3)] backdrop-blur-sm">
+            <div className="-mx-6 rounded-lg bg-white/7 px-6 py-3 shadow-[0_4px_12px_rgba(0,0,0,0.3)] backdrop-blur-sm transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_6px_16px_rgba(0,0,0,0.4)]">
               <h2 className="text-sm font-medium uppercase tracking-wide text-[hsl(var(--text))]">
                 Today&apos;s position
               </h2>
@@ -59,7 +59,7 @@ export default function HomePage() {
           </GlassCard>
         ) : (
           <GlassCard>
-            <div className="-mx-6 rounded-lg bg-white/7 px-6 py-3 shadow-[0_4px_12px_rgba(0,0,0,0.3)] backdrop-blur-sm">
+            <div className="-mx-6 rounded-lg bg-white/7 px-6 py-3 shadow-[0_4px_12px_rgba(0,0,0,0.3)] backdrop-blur-sm transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_6px_16px_rgba(0,0,0,0.4)]">
               <h2 className="text-sm font-medium uppercase tracking-wide text-[hsl(var(--text))]">
                 Today&apos;s position
               </h2>
@@ -73,7 +73,7 @@ export default function HomePage() {
         )
       ) : (
         <GlassCard>
-          <div className="-mx-6 rounded-lg bg-white/6 px-6 py-3 shadow-[0_4px_12px_rgba(0,0,0,0.3)] backdrop-blur-sm">
+          <div className="-mx-6 rounded-lg bg-white/6 px-6 py-4 shadow-[0_4px_12px_rgba(0,0,0,0.3)] backdrop-blur-sm transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_6px_16px_rgba(0,0,0,0.4)]">
             <h2 className="text-sm font-medium uppercase tracking-wide text-[hsl(var(--text))]">
               Choose a start date
             </h2>
@@ -81,20 +81,20 @@ export default function HomePage() {
               Set a start date to let the app track which week and day you&apos;re
               on. You can start today, or pick any date you want to treat as Day 1.
             </p>
-          </div>
-          <div className="mt-3 flex flex-wrap items-center gap-3">
-            <Link href="/settings" className="btn-primary">
-              Set start date in Settings
-            </Link>
-            <p className="text-xs text-[hsl(var(--muted))]">
-              You can always change this later.
-            </p>
+            <div className="mt-4 flex flex-wrap items-center gap-3">
+              <Link href="/settings" className="btn-primary">
+                Set start date in Settings
+              </Link>
+              <p className="text-xs text-[hsl(var(--muted))]">
+                You can always change this later.
+              </p>
+            </div>
           </div>
         </GlassCard>
       )}
 
       <GlassCard>
-        <div className="-mx-6 rounded-lg bg-white/6 px-6 py-3 shadow-[0_4px_12px_rgba(0,0,0,0.3)] backdrop-blur-sm">
+        <div className="-mx-6 rounded-lg bg-white/6 px-6 py-3 shadow-[0_4px_12px_rgba(0,0,0,0.3)] backdrop-blur-sm transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_6px_16px_rgba(0,0,0,0.4)]">
           <h2 className="text-sm font-medium uppercase tracking-wide text-[hsl(var(--text))]">
             Program overview
           </h2>
@@ -105,7 +105,7 @@ export default function HomePage() {
           </p>
         </div>
         {firstWeek ? (
-          <div className="-mx-6 mt-4 rounded-xl bg-white/8 px-6 py-4 shadow-[0_4px_12px_rgba(0,0,0,0.3)] backdrop-blur-sm">
+          <div className="-mx-6 mt-4 rounded-xl bg-white/8 px-6 py-4 shadow-[0_4px_12px_rgba(0,0,0,0.3)] backdrop-blur-sm transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_6px_16px_rgba(0,0,0,0.4)]">
             <p className="text-xs font-medium uppercase tracking-wide text-[hsl(var(--muted))]">
               Week {firstWeek.week} preview
             </p>

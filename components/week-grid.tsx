@@ -21,8 +21,8 @@ export function WeekGrid() {
 
   return (
     <div className="space-y-3">
-      <div className="flex items-center justify-between rounded-xl bg-white/6 px-6 py-3 shadow-[0_4px_12px_rgba(0,0,0,0.3)] backdrop-blur-sm">
-        <h2 className="text-sm font-medium uppercase tracking-wide text-[hsl(var(--text))]">
+      <div className="flex items-center justify-between">
+        <h2 className="text-sm font-medium uppercase tracking-wide text-[hsl(var(--muted))]">
           Your journey
         </h2>
         <p className="text-xs text-[hsl(var(--muted))]">
@@ -36,7 +36,7 @@ export function WeekGrid() {
         ))}
       </div>
 
-      <p className="mt-1 rounded-lg bg-white/6 px-6 py-2 text-[10px] text-[hsl(var(--muted))] shadow-[0_2px_8px_rgba(0,0,0,0.25)] backdrop-blur-sm">
+      <p className="mt-1 rounded-lg bg-white/6 px-6 py-2 text-[10px] text-[hsl(var(--muted))] shadow-[0_2px_8px_rgba(0,0,0,0.25)] backdrop-blur-sm transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_4px_12px_rgba(0,0,0,0.35)]">
         Green squares indicate days where you marked the practice as done.
       </p>
     </div>
@@ -62,7 +62,7 @@ function WeekCard({ weekNumber }: WeekCardProps) {
 
   return (
     <GlassCard className="week-card">
-      <div className="-mx-6 rounded-lg bg-white/7 px-6 py-4 shadow-[0_4px_12px_rgba(0,0,0,0.3)] backdrop-blur-sm">
+      <div className="-mx-6 rounded-lg bg-white/7 px-6 py-4 shadow-[0_4px_12px_rgba(0,0,0,0.3)] backdrop-blur-sm transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_6px_16px_rgba(0,0,0,0.4)]">
         <div className="flex items-center justify-between gap-2 mb-3">
           <div className="flex flex-col">
             <span className="text-xs font-semibold uppercase tracking-wide text-[hsl(var(--muted))]">
