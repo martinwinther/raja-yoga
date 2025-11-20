@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "../lib/cn";
+import { useSubscription } from "../context/subscription-context";
 
 const links = [
   { href: "/", label: "Home" },
@@ -11,11 +12,61 @@ const links = [
   { href: "/settings", label: "Settings" },
 ];
 
+function SubscriptionBadge() {
+  const {
+    status,
+    daysLeft,
+    isTrialActive,
+    isActivePaid,
+    isExpired,
+    loading,
+  } = useSubscription();
+
+  if (loading) {
+    return (
+      <span className="rounded-full bg-white/5 px-2 py-1 text-[10px] text-[hsl(var(--muted))] border border-[hsla(var(--border),0.4)]">
+        Loading…
+      </span>
+    );
+  }
+
+  if (isActivePaid) {
+    return (
+      <span className="rounded-full bg-emerald-500/15 px-2 py-1 text-[10px] font-medium text-emerald-200 border border-emerald-400/60">
+        Pro
+      </span>
+    );
+  }
+
+  if (isTrialActive && daysLeft !== null) {
+    return (
+      <span className="rounded-full bg-amber-500/15 px-2 py-1 text-[10px] font-medium text-amber-100 border border-amber-400/70">
+        Trial · {daysLeft} day{daysLeft === 1 ? "" : "s"} left
+      </span>
+    );
+  }
+
+  if (isExpired) {
+    return (
+      <span className="rounded-full bg-red-500/15 px-2 py-1 text-[10px] font-medium text-red-200 border border-red-400/70">
+        Trial ended
+      </span>
+    );
+  }
+
+  // fallback (no doc / none)
+  return (
+    <span className="rounded-full bg-white/5 px-2 py-1 text-[10px] text-[hsl(var(--muted))] border border-[hsla(var(--border),0.4)]">
+      Free
+    </span>
+  );
+}
+
 export function MainNav() {
   const pathname = usePathname();
 
   return (
-    <nav className="hidden gap-4 text-sm text-[hsl(var(--muted))] sm:flex">
+    <nav className="hidden gap-4 text-sm text-[hsl(var(--muted))] sm:flex sm:items-center">
       {links.map((link) => {
         const isActive =
           link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);
@@ -33,6 +84,7 @@ export function MainNav() {
           </Link>
         );
       })}
+      <SubscriptionBadge />
     </nav>
   );
 }

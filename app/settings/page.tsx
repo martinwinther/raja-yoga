@@ -7,9 +7,18 @@ import {
   ProgressState,
   PROGRESS_STORAGE_KEY,
 } from "../../context/progress-context";
+import { useSubscription } from "../../context/subscription-context";
 
 export default function SettingsPage() {
   const { settings, dispatch } = useProgress();
+  const {
+    status,
+    daysLeft,
+    trialEndsAt,
+    isTrialActive,
+    isActivePaid,
+    isExpired,
+  } = useSubscription();
 
   const handleDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value || null;
@@ -163,6 +172,67 @@ export default function SettingsPage() {
           >
             Reset all progress
           </button>
+        </div>
+      </GlassCard>
+
+      <GlassCard>
+        <h2 className="text-sm font-medium uppercase tracking-wide text-[hsl(var(--muted))]">
+          Subscription
+        </h2>
+        <p className="mt-1 text-sm text-[hsl(var(--muted))]">
+          This journey starts with a free month so you can see if the 52-week
+          structure fits your life.
+        </p>
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          <div className="rounded-xl bg-white/5 px-3 py-2">
+            <p className="text-xs uppercase tracking-wide text-[hsl(var(--muted))]">
+              Status
+            </p>
+            <p className="mt-1 text-sm font-semibold text-[hsl(var(--text))]">
+              {isActivePaid && "Pro (paid)"}
+              {isTrialActive && "Free trial"}
+              {isExpired && "Trial ended"}
+              {!isActivePaid && !isTrialActive && !isExpired && "Free"}
+            </p>
+            {isTrialActive && daysLeft !== null && (
+              <p className="mt-1 text-xs text-[hsl(var(--muted))]">
+                About {daysLeft} day{daysLeft === 1 ? "" : "s"} left in your
+                trial.
+              </p>
+            )}
+            {trialEndsAt && (
+              <p className="mt-1 text-[10px] text-[hsl(var(--muted))]">
+                Trial ends:{" "}
+                {trialEndsAt.toLocaleDateString(undefined, {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </p>
+            )}
+          </div>
+          <div className="flex flex-col gap-1 text-[10px] text-[hsl(var(--muted))]">
+            <p>
+              When the trial ends, you&apos;ll still be able to read your notes
+              and see your journey, but new edits will be locked.
+            </p>
+            <p>
+              In a future version, this is where you&apos;ll be able to upgrade
+              to the full paid experience.
+            </p>
+          </div>
+        </div>
+        <div className="mt-4 flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            className="btn-primary opacity-70 cursor-not-allowed"
+            disabled
+          >
+            Upgrade (coming soon)
+          </button>
+          <span className="text-[10px] text-[hsl(var(--muted))]">
+            Payments are not enabled yet.
+          </span>
         </div>
       </GlassCard>
 
