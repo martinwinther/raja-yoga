@@ -47,6 +47,21 @@ export function getDayIndexInWeek(dayNumber: number): number | undefined {
   return (zeroBased % DAYS_PER_WEEK) + 1;
 }
 
+/**
+ * Given a week number (1..TOTAL_WEEKS) and day index within week (1..7),
+ * return the corresponding 1-based global day number (1..TOTAL_DAYS),
+ * or null if inputs are invalid.
+ */
+export function getGlobalDayNumberFromWeekAndDay(
+  weekNumber: number,
+  dayIndex: number
+): number | null {
+  if (weekNumber < 1 || weekNumber > TOTAL_WEEKS) return null;
+  if (dayIndex < 1 || dayIndex > DAYS_PER_WEEK) return null;
+
+  return (weekNumber - 1) * DAYS_PER_WEEK + dayIndex;
+}
+
 if (process.env.NODE_ENV !== "production") {
   // Basic sanity checks for the static program.
   if (YOGA_PROGRAM.length > 0) {
