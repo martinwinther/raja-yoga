@@ -9,6 +9,9 @@ import { ProgressProvider } from "../context/progress-context";
 export const metadata: Metadata = {
   title: "52 Weeks of Raja Yoga",
   description: "A 52-week Raja Yoga practice journey based on the Yoga Sūtras.",
+  icons: {
+    icon: "/icon.svg",
+  },
 };
 
 export default function RootLayout({
