@@ -9,7 +9,6 @@ import {
 } from "react";
 import {
   onAuthStateChanged,
-  signInAnonymously,
   User,
 } from "firebase/auth";
 import { auth } from "../lib/firebase/client";
@@ -26,22 +25,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
-      if (!firebaseUser) {
-        try {
-          const cred = await signInAnonymously(auth);
-          setUser(cred.user);
-        } catch (error) {
-          // eslint-disable-next-line no-console
-          console.warn("[Auth] Anonymous sign-in failed:", error);
-          setUser(null);
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        setUser(firebaseUser);
-        setLoading(false);
-      }
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      setUser(firebaseUser);
+      setLoading(false);
     });
 
     return () => unsubscribe();
