@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "../lib/cn";
 import { useAuth } from "../context/auth-context";
-import { useSubscription } from "../context/subscription-context";
 
 const links = [
   { href: "/", label: "Home" },
@@ -15,55 +14,6 @@ const links = [
   { href: "/journal", label: "Journal" },
   { href: "/settings", label: "Settings" },
 ];
-
-function SubscriptionBadge() {
-  const {
-    status,
-    isTrialActive,
-    isActivePaid,
-    isExpired,
-    loading,
-  } = useSubscription();
-
-  if (loading) {
-    return (
-      <span className="rounded-full bg-white/5 px-2 py-1 text-[10px] text-[hsl(var(--muted))] border border-[hsla(var(--border),0.4)]">
-        Loading…
-      </span>
-    );
-  }
-
-  if (isActivePaid) {
-    return (
-      <span className="rounded-full bg-emerald-500/15 px-2 py-1 text-[10px] font-medium text-emerald-200 border border-emerald-400/60">
-        Pro
-      </span>
-    );
-  }
-
-  if (isTrialActive) {
-    return (
-      <span className="rounded-full bg-amber-500/15 px-2 py-1 text-[10px] font-medium text-amber-100 border border-amber-400/70">
-        Trial · 4 weeks free
-      </span>
-    );
-  }
-
-  if (isExpired) {
-    return (
-      <span className="rounded-full bg-red-500/15 px-2 py-1 text-[10px] font-medium text-red-200 border border-red-400/70">
-        Upgrade required
-      </span>
-    );
-  }
-
-  // fallback (no doc / none)
-  return (
-    <span className="rounded-full bg-white/5 px-2 py-1 text-[10px] text-[hsl(var(--muted))] border border-[hsla(var(--border),0.4)]">
-      Free
-    </span>
-  );
-}
 
 export function MainNav() {
   const pathname = usePathname();
@@ -88,7 +38,6 @@ export function MainNav() {
           </Link>
         );
       })}
-      <SubscriptionBadge />
       {user && (
         <button
           type="button"
