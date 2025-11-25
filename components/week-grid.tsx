@@ -23,6 +23,7 @@ export function WeekGrid() {
   const weeks = Array.from({ length: TOTAL_WEEKS }, (_, i) => i + 1);
   const current = getCurrentWeekAndDay(settings);
   const todayGlobalDayNumber = current?.globalDayNumber ?? null;
+  const currentWeek = current?.week ?? null;
 
   return (
     <div className="space-y-3">
@@ -41,6 +42,7 @@ export function WeekGrid() {
             key={weekNumber}
             weekNumber={weekNumber}
             todayGlobalDayNumber={todayGlobalDayNumber}
+            currentWeek={currentWeek}
           />
         ))}
       </div>
@@ -55,9 +57,10 @@ export function WeekGrid() {
 interface WeekCardProps {
   weekNumber: number;
   todayGlobalDayNumber: number | null;
+  currentWeek: number | null;
 }
 
-function WeekCard({ weekNumber, todayGlobalDayNumber }: WeekCardProps) {
+function WeekCard({ weekNumber, todayGlobalDayNumber, currentWeek }: WeekCardProps) {
   const { dayProgress, weekProgress } = useProgress();
   const { canAccessDay } = useSubscription();
 
@@ -71,9 +74,16 @@ function WeekCard({ weekNumber, todayGlobalDayNumber }: WeekCardProps) {
 
   const isBookmarked = weekState?.bookmarked ?? false;
 
+  const isCurrentWeek = currentWeek !== null && weekNumber === currentWeek;
+
   return (
     <GlassCard className="week-card">
-      <div className="-mx-6 rounded-lg bg-white/6 px-6 py-4 shadow-[0_4px_12px_rgba(0,0,0,0.3)] backdrop-blur-sm transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_6px_16px_rgba(0,0,0,0.4)]">
+      <div
+        className={cn(
+          "-mx-6 rounded-lg bg-white/6 px-6 py-4 shadow-[0_4px_12px_rgba(0,0,0,0.3)] backdrop-blur-sm transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_6px_16px_rgba(0,0,0,0.4)]",
+          isCurrentWeek && "ring-2 ring-[hsla(var(--accent-soft),0.9)] ring-offset-2 ring-offset-black/30"
+        )}
+      >
         <div className="flex items-center justify-between gap-2 mb-3">
           <div className="flex flex-col">
             <span className="text-xs font-semibold uppercase tracking-wide text-[hsl(var(--muted))]">
@@ -121,34 +131,44 @@ function WeekCard({ weekNumber, todayGlobalDayNumber }: WeekCardProps) {
                 todayGlobalDayNumber !== null &&
                 globalDayNumber === todayGlobalDayNumber;
 
+              // Allow clicking on current or past days only
+              const isPastOrCurrent =
+                todayGlobalDayNumber !== null &&
+                globalDayNumber <= todayGlobalDayNumber;
+
               const canAccess = canAccessDay(globalDayNumber);
-              const isLocked = !canAccess;
+              const isLocked = !canAccess || !isPastOrCurrent;
+
+              const DayButton = isLocked ? "div" : Link;
 
               return (
-                <Link
+                <DayButton
                   key={globalDayNumber}
-                  href={`/day/${globalDayNumber}`}
+                  {...(isLocked
+                    ? {}
+                    : { href: `/day/${globalDayNumber}` })}
                   className={cn(
                     "flex h-8 w-8 items-center justify-center rounded-xl border text-xs transition-colors",
-                    done && canAccess
+                    isToday
+                      ? "border-emerald-400/80 bg-emerald-500/25 text-emerald-50 ring-2 ring-emerald-400/60 ring-offset-1 ring-offset-black/30"
+                      : done && canAccess && isPastOrCurrent
                       ? "border-emerald-400/80 bg-emerald-500/25 text-emerald-50"
                       : isLocked
                       ? "border-[hsla(var(--border),0.2)] bg-white/3 text-[hsl(var(--muted))] opacity-40 cursor-not-allowed"
-                      : "border-[hsla(var(--border),0.35)] bg-white/6 text-[hsl(var(--muted))] hover:border-[hsla(var(--border),0.7)]",
-                    isToday &&
-                      canAccess &&
-                      "ring-2 ring-[hsla(var(--accent-soft),0.9)] ring-offset-2 ring-offset-black/30"
+                      : "border-[hsla(var(--border),0.35)] bg-white/6 text-[hsl(var(--muted))] hover:border-[hsla(var(--border),0.7)]"
                   )}
                   title={
                     isToday
                       ? "Today"
+                      : isLocked && !isPastOrCurrent
+                      ? "Future day - not yet available"
                       : isLocked
                       ? "Upgrade to access"
                       : undefined
                   }
                 >
                   {dayIndex}
-                </Link>
+                </DayButton>
               );
             })}
           </div>
