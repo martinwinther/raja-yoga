@@ -17,6 +17,12 @@ service cloud.firestore {
       allow write: if true;
     }
     
+    // Glossary terms are publicly readable, writable for now (restrict later if needed)
+    match /glossary/{termId} {
+      allow read: if true;
+      allow write: if true;
+    }
+    
     // Deny all other access by default
     match /{document=**} {
       allow read, write: if false;
