@@ -2,7 +2,7 @@ import Stripe from "stripe";
 import { NextRequest, NextResponse } from "next/server";
 import { getFirestore } from "firebase-admin/firestore";
 import { initializeApp, getApps, cert, App } from "firebase-admin/app";
-import { config } from "../../../lib/config";
+import { config } from "../../../../lib/config";
 
 const stripe = new Stripe(config.stripe.secretKey);
 
