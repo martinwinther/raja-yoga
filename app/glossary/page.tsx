@@ -83,7 +83,7 @@ export default function GlossaryPage() {
               {searchQuery && ` matching "${searchQuery}"`}
             </div>
           )}
-          <div className="space-y-4">
+          <div className="space-y-2">
             {filteredTerms.map((term) => (
               <GlossaryTermCard
                 key={term.id}
