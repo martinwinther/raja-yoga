@@ -7,6 +7,7 @@ import { db } from "../lib/firebase/client";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { useAuth } from "./auth-context";
 import { useAppStatus } from "./app-status-context";
+import { useSubscription } from "./subscription-context";
 
 export interface ProgressState {
   dayProgress: Record<number, DayProgress>;
@@ -196,6 +197,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = React.useReducer(progressReducer, initialState);
   const { user, loading: authLoading } = useAuth();
   const { setLastError } = useAppStatus();
+  const { canAccessDay, status: subscriptionStatus, loading: subscriptionLoading } = useSubscription();
 
   // Hydrate from localStorage once on mount
   React.useEffect(() => {
@@ -238,7 +240,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
 
   // Firestore hydration once we know auth state
   React.useEffect(() => {
-    if (authLoading) return;
+    if (authLoading || subscriptionLoading) return;
     if (!user || !user.emailVerified) return;
 
     const run = async () => {
@@ -265,17 +267,43 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
           }
         } else {
           // Initialize journey doc from current local state
+          // Filter data based on subscription access
+          const filteredDayProgress: Record<number, DayProgress> = {};
+          const filteredWeekProgress: Record<number, WeekProgress> = {};
+
+          Object.keys(state.dayProgress).forEach((dayKey) => {
+            const dayNumber = Number(dayKey);
+            if (canAccessDay(dayNumber)) {
+              filteredDayProgress[dayNumber] = state.dayProgress[dayNumber];
+            }
+          });
+
+          const maxWeek = subscriptionStatus === "active" ? TOTAL_WEEKS : 4;
+          Object.keys(state.weekProgress).forEach((weekKey) => {
+            const weekNumber = Number(weekKey);
+            if (weekNumber >= 1 && weekNumber <= maxWeek) {
+              filteredWeekProgress[weekNumber] = state.weekProgress[weekNumber];
+            }
+          });
+
           await setDoc(journeyRef, {
-            ...state,
+            dayProgress: filteredDayProgress,
+            weekProgress: filteredWeekProgress,
+            settings: state.settings,
             programKey: "dailysutra-v1",
             programVersion: "1",
             updatedAt: serverTimestamp(),
           });
         }
-      } catch (error) {
+      } catch (error: any) {
         // eslint-disable-next-line no-console
         console.warn("[Progress] Failed to hydrate from Firestore:", error);
-        setLastError("Failed to sync with server. Working from local copy.");
+        const isPermissionDenied = error?.code === "permission-denied";
+        setLastError(
+          isPermissionDenied
+            ? "Access denied. Please check your subscription status."
+            : "Failed to sync with server. Working from local copy."
+        );
       }
     };
 
@@ -283,22 +311,45 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     // we only want to run on first auth resolution or when user changes,
     // not on every state change
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [authLoading, user?.uid, setLastError]);
+  }, [authLoading, subscriptionLoading, user?.uid, setLastError, canAccessDay, subscriptionStatus]);
 
   // Firestore persistence on state changes
   React.useEffect(() => {
-    if (authLoading) return;
+    if (authLoading || subscriptionLoading) return;
     if (!user || !user.emailVerified) return;
 
     const journeyRef = doc(db, "users", user.uid, "journeys", "dailysutra-v1");
 
     const run = async () => {
       try {
+        // Filter dayProgress and weekProgress based on subscription access
+        // Only write data the user is allowed to access
+        const filteredDayProgress: Record<number, DayProgress> = {};
+        const filteredWeekProgress: Record<number, WeekProgress> = {};
+
+        // Filter days based on subscription
+        Object.keys(state.dayProgress).forEach((dayKey) => {
+          const dayNumber = Number(dayKey);
+          if (canAccessDay(dayNumber)) {
+            filteredDayProgress[dayNumber] = state.dayProgress[dayNumber];
+          }
+        });
+
+        // Filter weeks based on subscription
+        // Trial users can access weeks 1-4, active users can access all weeks
+        const maxWeek = subscriptionStatus === "active" ? TOTAL_WEEKS : 4;
+        Object.keys(state.weekProgress).forEach((weekKey) => {
+          const weekNumber = Number(weekKey);
+          if (weekNumber >= 1 && weekNumber <= maxWeek) {
+            filteredWeekProgress[weekNumber] = state.weekProgress[weekNumber];
+          }
+        });
+
         await setDoc(
           journeyRef,
           {
-            dayProgress: state.dayProgress,
-            weekProgress: state.weekProgress,
+            dayProgress: filteredDayProgress,
+            weekProgress: filteredWeekProgress,
             settings: state.settings,
             programKey: "dailysutra-v1",
             programVersion: "1",
@@ -306,21 +357,30 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
           },
           { merge: true }
         );
-      } catch (error) {
+      } catch (error: any) {
         // eslint-disable-next-line no-console
         console.warn("[Progress] Failed to persist to Firestore:", error);
-        setLastError("Failed to sync with server. Working from local copy.");
+        const isPermissionDenied = error?.code === "permission-denied";
+        // Don't show error for permission-denied during normal operation
+        // Client-side validation should prevent this, but if it happens,
+        // we silently fail and keep working locally
+        if (!isPermissionDenied) {
+          setLastError("Failed to sync with server. Working from local copy.");
+        }
       }
     };
 
     run();
   }, [
     authLoading,
+    subscriptionLoading,
     user?.uid,
     state.dayProgress,
     state.weekProgress,
     state.settings,
     setLastError,
+    canAccessDay,
+    subscriptionStatus,
   ]);
 
   const value: ProgressContextValue = React.useMemo(

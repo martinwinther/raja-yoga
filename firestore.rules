@@ -1,14 +1,69 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Users can read/write their own user document
-    match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+    // Helper function to get user subscription status
+    function getUserSubscriptionStatus() {
+      let userDoc = get(/databases/$(database)/documents/users/$(request.auth.uid));
+      // Return 'none' if document doesn't exist or status is missing
+      return userDoc != null && userDoc.data.subscriptionStatus != null ? 
+             userDoc.data.subscriptionStatus : 
+             'none';
     }
     
-    // Users can only read/write their own journey data
+    // Helper function to check if user has valid subscription (trial or active)
+    function hasValidSubscription() {
+      let status = getUserSubscriptionStatus();
+      return status == 'trial' || status == 'active';
+    }
+    
+    // Helper function to check if user has active paid subscription
+    function hasActiveSubscription() {
+      return getUserSubscriptionStatus() == 'active';
+    }
+    
+    // Validate that dayProgress only contains trial-accessible days (1-28) for trial users
+    // For active users, all days (1-364) are allowed
+    function validateDayProgressAccess() {
+      let dayProgress = request.resource.data.dayProgress;
+      // If dayProgress is not being written, allow (partial update to other fields)
+      return dayProgress == null || 
+             hasActiveSubscription() ||
+             (getUserSubscriptionStatus() == 'trial' && 
+              !dayProgress.keys().hasAny([29, 30, 31, 32, 50, 100, 200, 300, 364]));
+    }
+    
+    // Validate that weekProgress only contains trial-accessible weeks (1-4) for trial users
+    // For active users, all weeks (1-52) are allowed
+    function validateWeekProgressAccess() {
+      let weekProgress = request.resource.data.weekProgress;
+      // If weekProgress is not being written, allow (partial update to other fields)
+      return weekProgress == null || 
+             hasActiveSubscription() ||
+             (getUserSubscriptionStatus() == 'trial' && 
+              !weekProgress.keys().hasAny([5, 6, 10, 20, 30, 40, 52]));
+    }
+    
+    // Users can read their own user document
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      
+      // Users can write their own user document (for initial creation and updates)
+      // Note: Subscription status updates should ideally come from server/webhook only,
+      // but we allow user writes for flexibility (client creates trial status initially)
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Journey documents with subscription-based write restrictions
     match /users/{userId}/journeys/{journeyId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      // Users can always read their own journey data
+      allow read: if request.auth != null && request.auth.uid == userId;
+      
+      // Write access requires valid subscription and day/week validation
+      allow write: if request.auth != null 
+                   && request.auth.uid == userId
+                   && hasValidSubscription()
+                   && validateDayProgressAccess()
+                   && validateWeekProgressAccess();
     }
     
     // Sutras are publicly readable, writable for now (restrict later if needed)

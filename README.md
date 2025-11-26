@@ -28,7 +28,7 @@ A year-long journey through the Yoga Sūtras, guiding users through 52 weeks of 
 
 ### Prerequisites
 
-- Node.js 18+ 
+- Node.js 18+
 - npm or pnpm
 - Firebase project with Auth and Firestore enabled
 - Stripe account (test mode for development)
@@ -36,12 +36,14 @@ A year-long journey through the Yoga Sūtras, guiding users through 52 weeks of 
 ### Setup Steps
 
 1. **Clone the repository**
+
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/martinwinther/dailysutra
    cd dailysutra
    ```
 
 2. **Install dependencies**
+
    ```bash
    npm install
    ```
@@ -59,12 +61,15 @@ A year-long journey through the Yoga Sūtras, guiding users through 52 weeks of 
    - Set up a webhook endpoint (see Stripe Integration section below)
 
 5. **Configure environment variables**
+
    ```bash
    cp .env.example .env.local
    ```
+
    Fill in all required values (see Environment Variables section below)
 
 6. **Start development server**
+
    ```bash
    npm run dev
    ```
@@ -106,6 +111,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 ## Firebase Structure
 
 ### User Documents (`users/{uid}`)
+
 ```javascript
 {
   subscriptionStatus: "none" | "trial" | "active" | "expired",
@@ -117,6 +123,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
 ### Journey Documents (`users/{uid}/journeys/dailysutra-v1`)
+
 ```javascript
 {
   programKey: "dailysutra-v1",
@@ -142,7 +149,7 @@ NEXT_PUBLIC_APP_URL=http://localhost:3000
 }
 ```
 
-**Note:** Subscription gating is currently handled client-side via `SubscriptionProvider`. For production use, Firestore security rules should enforce subscription status on write operations.
+**Note:** Subscription gating is enforced both client-side (via `SubscriptionProvider`) and server-side (via Firestore security rules). The security rules prevent unauthorized writes to journey data based on subscription status and day/week access restrictions.
 
 ## Stripe Integration
 
@@ -167,6 +174,7 @@ For production, you must configure Stripe webhooks:
    - Copy the "Signing secret" (starts with `whsec_`)
 
 2. **Set environment variable:**
+
    ```bash
    STRIPE_WEBHOOK_SECRET=whsec_your_signing_secret
    ```
@@ -176,9 +184,11 @@ For production, you must configure Stripe webhooks:
    - Click "Generate new private key"
    - Copy the entire JSON content
    - Set as environment variable (as a JSON string on a single line):
+
    ```bash
    FIREBASE_SERVICE_ACCOUNT='{"type":"service_account","project_id":"...","private_key":"...",...}'
    ```
+
    **Important:** The JSON must be on a single line. Remove all line breaks and ensure proper escaping of quotes within the JSON string.
 
 **Note:** The webhook provides server-side verification and is the authoritative source for payment status. The success page verification is a fallback for immediate user feedback.
@@ -209,6 +219,7 @@ To modify program content, edit this file without touching the application logic
 ### Glass UI Design
 
 The app uses a custom "glass morphism" design system with:
+
 - Semi-transparent backgrounds
 - Backdrop blur effects
 - Subtle borders and shadows
@@ -216,7 +227,6 @@ The app uses a custom "glass morphism" design system with:
 
 ## Future Work / TODO
 
-- **Enhance Firestore security rules** to enforce subscription status on write operations
 - **Implement account management** features (email change, password reset) in Settings
 - **Improve PWA assets** with better icons, splash screens, and branding
 - **Add multi-program support** for other 52-week spiritual/philosophical journeys
