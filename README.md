@@ -7,8 +7,7 @@ A year-long journey through the Yoga Sūtras, guiding users through 52 weeks of 
 - **52-week curriculum** linked to specific sūtras from Patañjali's Yoga Sūtras
 - **Daily practice tracking** with checkbox completion and personal notes
 - **Weekly review system** with completion flags, enjoyment ratings, bookmarks, and reflection notes
-- **Progress dashboard** showing statistics, recent activity, and bookmarked weeks
-- **Journal timeline** displaying daily notes and weekly reflections in chronological order
+- **Progress dashboard** showing statistics, daily notes, weekly reflections, and bookmarked weeks
 - **Email-based authentication** powered by Firebase Auth
 - **Trial subscription model** with 4-week free access (weeks 1-4), then editing locked unless upgraded
 - **Stripe Checkout integration** for one-time payment to unlock remaining 48 weeks (weeks 5-52)
@@ -79,8 +78,7 @@ A year-long journey through the Yoga Sūtras, guiding users through 52 weeks of 
 - `/` – Home dashboard (requires authentication)
 - `/auth` – Sign up / Sign in page
 - `/day/[dayNumber]` – Individual day practice page (1-364)
-- `/progress` – Progress statistics and bookmarked weeks
-- `/journal` – Timeline of daily notes and weekly reflections
+- `/progress` – Progress statistics, daily notes, weekly reflections, and bookmarked weeks
 - `/settings` – Account settings, backup/restore, subscription management
 - `/about` – Information about the program
 - `/offline` – Offline fallback page

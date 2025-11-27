@@ -7,7 +7,6 @@ import {
   ScrollText,
   BookMarked,
   TrendingUp,
-  FileText,
   Settings,
   LogIn,
   LogOut,
@@ -23,7 +22,6 @@ const publicLinks = [
 
 const authenticatedLinks = [
   { href: "/progress", label: "Progress", icon: TrendingUp },
-  { href: "/journal", label: "Journal", icon: FileText },
   { href: "/settings", label: "Settings", icon: Settings },
 ];
 
