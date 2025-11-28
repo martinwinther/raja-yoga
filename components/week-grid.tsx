@@ -26,9 +26,9 @@ export function WeekGrid() {
   const currentWeek = current?.week ?? null;
 
   return (
-    <div className="space-y-3">
+    <section className="space-y-3" aria-labelledby="journey-heading">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-medium uppercase tracking-wide text-[hsl(var(--muted))]">
+        <h2 id="journey-heading" className="text-sm font-medium uppercase tracking-wide text-[hsl(var(--muted))]">
           Your journey
         </h2>
         <p className="text-xs text-[hsl(var(--muted))]">
@@ -50,7 +50,7 @@ export function WeekGrid() {
       <p className="mt-1 rounded-lg bg-white/6 px-6 py-2 text-[10px] text-[hsl(var(--muted))] shadow-[0_2px_8px_rgba(0,0,0,0.25)] backdrop-blur-sm transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_4px_12px_rgba(0,0,0,0.35)]">
         Green squares indicate days where you marked the practice as done.
       </p>
-    </div>
+    </section>
   );
 }
 
@@ -165,6 +165,8 @@ function WeekCard({ weekNumber, todayGlobalDayNumber, currentWeek }: WeekCardPro
                     key={globalDayNumber}
                     className={dayClassName}
                     title={dayTitle}
+                    role="img"
+                    aria-label={`Day ${dayIndex}${dayTitle ? `: ${dayTitle}` : ""}`}
                   >
                     {dayIndex}
                   </div>
@@ -177,8 +179,9 @@ function WeekCard({ weekNumber, todayGlobalDayNumber, currentWeek }: WeekCardPro
                   href={`/day/${globalDayNumber}`}
                   className={dayClassName}
                   title={dayTitle}
+                  aria-label={`Day ${dayIndex}${dayTitle ? `: ${dayTitle}` : ""}, Week ${weekNumber}`}
                 >
-                  {dayIndex}
+                  <span aria-hidden="true">{dayIndex}</span>
                 </Link>
               );
             })}

@@ -170,7 +170,7 @@ export default function DayPage({ params }: DayPageProps) {
       <div className="flex items-center justify-between gap-2">
         <div className="flex gap-2">
           {hasPrev ? (
-            <Link href={`/day/${prevDay}`} className="btn-ghost">
+            <Link href={`/day/${prevDay}`} className="btn-ghost" aria-label="Go to previous day">
               ← Previous day
             </Link>
           ) : (
@@ -178,6 +178,7 @@ export default function DayPage({ params }: DayPageProps) {
               className="btn-ghost opacity-40 cursor-not-allowed"
               disabled
               aria-disabled="true"
+              aria-label="Previous day (unavailable)"
             >
               ← Previous day
             </button>
@@ -185,7 +186,7 @@ export default function DayPage({ params }: DayPageProps) {
         </div>
         <div className="flex gap-2">
           {hasNext ? (
-            <Link href={`/day/${nextDay}`} className="btn-ghost">
+            <Link href={`/day/${nextDay}`} className="btn-ghost" aria-label="Go to next day">
               Next day →
             </Link>
           ) : (
@@ -193,6 +194,7 @@ export default function DayPage({ params }: DayPageProps) {
               className="btn-ghost opacity-40 cursor-not-allowed"
               disabled
               aria-disabled="true"
+              aria-label="Next day (unavailable)"
             >
               Next day →
             </button>
@@ -266,6 +268,8 @@ export default function DayPage({ params }: DayPageProps) {
                   : "btn-ghost opacity-40 cursor-not-allowed border border-[hsla(var(--border),0.4)]"
               }
               disabled={!canAccessThisDay}
+              aria-label={didPractice ? "Mark practice as not done" : "Mark practice as done"}
+              aria-pressed={didPractice}
             >
               {canAccessThisDay
                 ? didPractice
@@ -306,6 +310,7 @@ export default function DayPage({ params }: DayPageProps) {
             )}
           </div>
           <textarea
+            id="daily-note"
             value={note}
             onChange={handleNoteChange}
             rows={5}
@@ -316,7 +321,12 @@ export default function DayPage({ params }: DayPageProps) {
                 : "Editing locked – this content requires a paid subscription. You can still read past notes."
             }
             disabled={!canAccessThisDay}
+            aria-label="Today's practice note"
+            aria-describedby="daily-note-description"
           />
+          <p id="daily-note-description" className="sr-only">
+            Jot down what you noticed in practice, any resistance, or a single sentence about how the day related to this week's theme.
+          </p>
         </div>
       </GlassCard>
 
@@ -335,7 +345,7 @@ export default function DayPage({ params }: DayPageProps) {
                 </p>
               </div>
 
-              <div className="flex flex-col gap-2">
+              <div className="flex flex-col gap-2" role="group" aria-label="Week flags">
                 <label className="flex items-center gap-2 text-sm text-[hsl(var(--muted))]">
                   <input
                     type="checkbox"
@@ -343,6 +353,7 @@ export default function DayPage({ params }: DayPageProps) {
                     onChange={handleToggleWeekCompleted}
                     disabled={!canAccessThisDay}
                     className="h-4 w-4 rounded border border-[hsla(var(--border),0.4)] bg-white/5 disabled:opacity-40 disabled:cursor-not-allowed"
+                    aria-label="Mark this week as completed"
                   />
                   <span>Mark this week as completed</span>
                 </label>
@@ -354,6 +365,7 @@ export default function DayPage({ params }: DayPageProps) {
                     onChange={handleToggleWeekEnjoyed}
                     disabled={!canAccessThisDay}
                     className="h-4 w-4 rounded border border-[hsla(var(--border),0.4)] bg-white/5 disabled:opacity-40 disabled:cursor-not-allowed"
+                    aria-label="I enjoyed this week"
                   />
                   <span>I enjoyed this week</span>
                 </label>
@@ -365,6 +377,7 @@ export default function DayPage({ params }: DayPageProps) {
                     onChange={handleToggleWeekBookmarked}
                     disabled={!canAccessThisDay}
                     className="h-4 w-4 rounded border border-[hsla(var(--border),0.4)] bg-white/5 disabled:opacity-40 disabled:cursor-not-allowed"
+                    aria-label="I want to bookmark this week to revisit later"
                   />
                   <span>I want to bookmark this week to revisit later</span>
                 </label>
@@ -398,6 +411,7 @@ export default function DayPage({ params }: DayPageProps) {
                   )}
                 </div>
                 <textarea
+                  id="weekly-reflection"
                   value={reflectionNote}
                   onChange={handleReflectionChange}
                   rows={4}
@@ -408,7 +422,12 @@ export default function DayPage({ params }: DayPageProps) {
                       ? "What did you notice about this week&apos;s theme in your day-to-day life?"
                       : "Editing locked – this content requires a paid subscription. You can still read past notes."
                   }
+                  aria-label="Weekly reflection"
+                  aria-describedby="weekly-reflection-description"
                 />
+                <p id="weekly-reflection-description" className="sr-only">
+                  A few lines about what shifted (or didn't) for you this week is enough.
+                </p>
               </div>
             </div>
           </div>

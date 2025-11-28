@@ -3,6 +3,8 @@ import "./globals.css";
 import { ThemeProvider } from "../components/theme-provider";
 import { MainNav } from "../components/main-nav";
 import { AppStatusBanner } from "../components/app-status-banner";
+import { SkipLink } from "../components/skip-link";
+import { KeyboardShortcuts } from "../components/keyboard-shortcuts";
 import { AuthProvider } from "../context/auth-context";
 import { SubscriptionProvider } from "../context/subscription-context";
 import { ProgressProvider } from "../context/progress-context";
@@ -71,13 +73,15 @@ export default function RootLayout({
                 <SubscriptionProvider>
                   <ProgressProvider>
                   <div className="flex min-h-screen flex-col">
-                    <header className="glass-nav sticky top-0 z-20">
+                    <SkipLink />
+                    <KeyboardShortcuts />
+                    <header className="glass-nav sticky top-0 z-20" role="banner">
                       <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
                         <MainNav />
                       </div>
                     </header>
                     <AppStatusBanner />
-                    <main className="flex-1">
+                    <main id="main-content" className="flex-1" role="main">
                       <div className="mx-auto max-w-5xl px-4 py-8 sm:py-10">
                         {children}
                       </div>

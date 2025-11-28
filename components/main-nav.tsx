@@ -36,7 +36,7 @@ export function MainNav() {
   const isAuthActive = pathname === "/auth";
 
   return (
-    <nav className="flex w-full items-center gap-2 sm:gap-4">
+    <nav className="flex w-full items-center gap-2 sm:gap-4" aria-label="Main navigation">
       {links.map((link) => {
         const isActive =
           link.href === "/" ? pathname === "/" : pathname.startsWith(link.href);

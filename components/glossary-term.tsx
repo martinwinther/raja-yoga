@@ -28,6 +28,7 @@ export function GlossaryTermCard({ term, definition }: GlossaryTermProps) {
           className="flex w-full items-start justify-between gap-4 text-left"
           aria-expanded={isExpanded}
           aria-controls={`definition-${term}`}
+          aria-label={`${isExpanded ? "Hide" : "Show"} definition for ${term}`}
         >
           <div className="flex-1">
             <h3 className="text-sm font-semibold text-[hsl(var(--text))]">

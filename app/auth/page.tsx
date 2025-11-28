@@ -110,24 +110,29 @@ export default function AuthPage() {
 
           <form onSubmit={handleSubmit} className="mt-4 space-y-4">
             <div className="space-y-1">
-              <label className="block text-xs font-medium text-[hsl(var(--muted))]">
+              <label htmlFor="email" className="block text-xs font-medium text-[hsl(var(--muted))]">
                 Email
               </label>
               <input
+                id="email"
                 type="email"
                 autoComplete="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="w-full rounded-xl border border-[hsla(var(--border),0.7)] bg-white/5 px-3 py-2 text-sm text-[hsl(var(--text))] outline-none focus:border-[hsl(var(--accent))]"
                 required
+                aria-required="true"
+                aria-invalid={authError ? "true" : "false"}
+                aria-describedby={authError ? "email-error" : undefined}
               />
             </div>
 
             <div className="space-y-1">
-              <label className="block text-xs font-medium text-[hsl(var(--muted))]">
+              <label htmlFor="password" className="block text-xs font-medium text-[hsl(var(--muted))]">
                 Password
               </label>
               <input
+                id="password"
                 type="password"
                 autoComplete={mode === "signup" ? "new-password" : "current-password"}
                 value={password}
@@ -135,17 +140,28 @@ export default function AuthPage() {
                 className="w-full rounded-xl border border-[hsla(var(--border),0.7)] bg-white/5 px-3 py-2 text-sm text-[hsl(var(--text))] outline-none focus:border-[hsl(var(--accent))]"
                 required
                 minLength={6}
+                aria-required="true"
+                aria-invalid={authError ? "true" : "false"}
+                aria-describedby={authError ? "password-error" : "password-help"}
               />
+              <p id="password-help" className="sr-only">
+                Password must be at least 6 characters long
+              </p>
             </div>
 
             {authError && (
-              <p className="text-xs text-red-300">{authError}</p>
+              <div role="alert" aria-live="assertive">
+                <p id="email-error" className="text-xs text-red-300">{authError}</p>
+                <p id="password-error" className="sr-only">{authError}</p>
+              </div>
             )}
 
             {showVerificationMessage && (
-              <p className="text-xs text-green-300">
-                Account created! Please check your email for a verification link.
-              </p>
+              <div role="status" aria-live="polite">
+                <p className="text-xs text-green-300">
+                  Account created! Please check your email for a verification link.
+                </p>
+              </div>
             )}
 
             <button

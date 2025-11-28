@@ -46,7 +46,9 @@ export function ShareButton({
       onClick={handleShare}
       disabled={sharing}
       className={`${baseClasses} ${className}`}
-      title="Share"
+      aria-label={shared ? "Content copied to clipboard" : sharing ? "Sharing content" : `Share ${title || "content"}`}
+      aria-live="polite"
+      aria-atomic="true"
     >
       {shared ? (
         <>

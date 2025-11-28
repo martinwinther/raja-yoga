@@ -37,6 +37,7 @@ export function SutraAccordion({
           className="flex w-full items-start justify-between gap-4 text-left"
           aria-expanded={isExpanded}
           aria-controls={`commentary-${sutraNumber}`}
+          aria-label={`${isExpanded ? "Hide" : "Show"} commentary for ${book} ${sutraNumber}: ${title}`}
         >
           <div className="flex-1 space-y-2">
             <div className="flex items-baseline gap-2">

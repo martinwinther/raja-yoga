@@ -342,13 +342,15 @@ export default function SettingsPage() {
             different calendar date.
           </p>
           <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center">
-            <label className="flex flex-col text-sm text-[hsl(var(--muted))]">
+            <label htmlFor="start-date" className="flex flex-col text-sm text-[hsl(var(--muted))]">
               <span className="mb-1">Journey start date</span>
               <input
+                id="start-date"
                 type="date"
                 value={settings.startDate ?? ""}
                 onChange={handleDateChange}
                 className="rounded-xl border border-[hsla(var(--border),0.4)] bg-white/5 px-3 py-2 text-sm text-[hsl(var(--text))] outline-none focus:border-[hsl(var(--accent))] focus:bg-white/7"
+                aria-label="Journey start date"
               />
             </label>
           </div>
@@ -371,6 +373,7 @@ export default function SettingsPage() {
             type="button"
             onClick={handleReset}
             className="mt-4 btn-primary"
+            aria-label="Reset all progress and notes. This action cannot be undone."
           >
             Reset all progress
           </button>
@@ -378,7 +381,7 @@ export default function SettingsPage() {
       </GlassCard>
 
       <div className="flex items-center justify-between px-6">
-        <h2 className="text-sm font-medium uppercase tracking-wide text-[hsl(var(--muted))]">
+        <h2 id="subscription-heading" className="text-sm font-medium uppercase tracking-wide text-[hsl(var(--muted))]">
           Subscription
         </h2>
       </div>
@@ -447,7 +450,7 @@ export default function SettingsPage() {
       </GlassCard>
 
       <div className="flex items-center justify-between px-6">
-        <h2 className="text-sm font-medium uppercase tracking-wide text-[hsl(var(--muted))]">
+        <h2 id="account-management-heading" className="text-sm font-medium uppercase tracking-wide text-[hsl(var(--muted))]">
           Account management
         </h2>
       </div>
@@ -606,7 +609,7 @@ export default function SettingsPage() {
       </GlassCard>
 
       <div className="flex items-center justify-between px-6">
-        <h2 className="text-sm font-medium uppercase tracking-wide text-[hsl(var(--muted))]">
+        <h2 id="notification-preferences-heading" className="text-sm font-medium uppercase tracking-wide text-[hsl(var(--muted))]">
           Notifications
         </h2>
       </div>
@@ -724,7 +727,7 @@ export default function SettingsPage() {
       </GlassCard>
 
       <div className="flex items-center justify-between px-6">
-        <h2 className="text-sm font-medium uppercase tracking-wide text-[hsl(var(--muted))]">
+        <h2 id="backup-restore-heading" className="text-sm font-medium uppercase tracking-wide text-[hsl(var(--muted))]">
           Backup &amp; restore
         </h2>
       </div>

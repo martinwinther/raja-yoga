@@ -12,7 +12,7 @@ export function PageHeader({ title, subtitle }: PageHeaderProps) {
         {title}
       </h1>
       {subtitle ? (
-        <p className="mt-2 max-w-2xl text-sm text-[hsl(var(--muted))]">
+        <p className="mt-2 max-w-2xl text-sm text-[hsl(var(--muted))]" id="page-subtitle">
           {subtitle}
         </p>
       ) : null}

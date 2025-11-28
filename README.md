@@ -268,7 +268,6 @@ The app uses a custom "glass morphism" design system with:
 
 ## Future Work / TODO
 - **Create admin dashboard** for program content management
-- **Add accessibility improvements** for screen readers and keyboard navigation
 - **Implement caching strategies** for better offline experience with journey data
 
 ## License
