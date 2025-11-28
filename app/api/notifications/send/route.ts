@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getFirestore } from "firebase-admin/firestore";
 import { getMessaging } from "firebase-admin/messaging";
 import { initializeApp, getApps, cert, App } from "firebase-admin/app";
-import { config } from "../../../../lib/config";
+import { serverConfig } from "../../../../lib/server-config";
 import { createServerLogger } from "../../../../lib/logger";
 
 const logger = createServerLogger("notifications-send");
@@ -13,7 +13,7 @@ function getFirebaseAdmin(): App {
   }
 
   try {
-    const serviceAccountJson = JSON.parse(config.firebase.serviceAccount);
+    const serviceAccountJson = JSON.parse(serverConfig.firebase.serviceAccount);
     return initializeApp({
       credential: cert(serviceAccountJson),
     });

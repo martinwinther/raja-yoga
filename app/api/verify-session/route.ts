@@ -1,11 +1,11 @@
 import Stripe from "stripe";
 import { NextRequest, NextResponse } from "next/server";
-import { config } from "../../../lib/config";
+import { serverConfig } from "../../../lib/server-config";
 import { createServerLogger } from "../../../lib/logger";
 
 const logger = createServerLogger("verify-session");
 
-const stripe = new Stripe(config.stripe.secretKey);
+const stripe = new Stripe(serverConfig.stripe.secretKey);
 
 export async function POST(request: NextRequest) {
   try {

@@ -2,12 +2,12 @@ import Stripe from "stripe";
 import { NextRequest, NextResponse } from "next/server";
 import { getFirestore } from "firebase-admin/firestore";
 import { initializeApp, getApps, cert, App } from "firebase-admin/app";
-import { config } from "../../../../lib/config";
+import { serverConfig } from "../../../../lib/server-config";
 import { createServerLogger } from "../../../../lib/logger";
 
 const logger = createServerLogger("webhook");
 
-const stripe = new Stripe(config.stripe.secretKey);
+const stripe = new Stripe(serverConfig.stripe.secretKey);
 
 function getFirebaseAdmin(): App {
   if (getApps().length > 0) {
@@ -15,7 +15,7 @@ function getFirebaseAdmin(): App {
   }
 
   try {
-    const serviceAccountJson = JSON.parse(config.firebase.serviceAccount);
+    const serviceAccountJson = JSON.parse(serverConfig.firebase.serviceAccount);
     return initializeApp({
       credential: cert(serviceAccountJson),
     });
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
   let event: Stripe.Event;
 
   try {
-    event = stripe.webhooks.constructEvent(body, signature, config.stripe.webhookSecret);
+    event = stripe.webhooks.constructEvent(body, signature, serverConfig.stripe.webhookSecret);
   } catch (error: any) {
     logger.error("Signature verification failed", error, { action: "verifySignature" });
     return NextResponse.json(

@@ -1,11 +1,12 @@
 import Stripe from "stripe";
 import { NextRequest, NextResponse } from "next/server";
 import { config } from "../../../lib/config";
+import { serverConfig } from "../../../lib/server-config";
 import { createServerLogger } from "../../../lib/logger";
 
 const logger = createServerLogger("create-checkout-session");
 
-const stripe = new Stripe(config.stripe.secretKey);
+const stripe = new Stripe(serverConfig.stripe.secretKey);
 
 export async function POST(request: NextRequest) {
   try {
@@ -25,7 +26,7 @@ export async function POST(request: NextRequest) {
       payment_method_types: ["card"],
       line_items: [
         {
-          price: config.stripe.priceId,
+          price: serverConfig.stripe.priceId,
           quantity: 1,
         },
       ],
