@@ -39,13 +39,35 @@ export async function shareContent(
   }
 
   // Fallback to clipboard
-  try {
-    await navigator.clipboard.writeText(content);
-    return true;
-  } catch (error) {
-    console.warn("[Sharing] Clipboard write failed:", error);
-    return false;
+  if (typeof navigator !== "undefined" && navigator.clipboard && navigator.clipboard.writeText) {
+    try {
+      await navigator.clipboard.writeText(content);
+      return true;
+    } catch (error) {
+      console.warn("[Sharing] Clipboard write failed:", error);
+      return false;
+    }
   }
+
+  // Last resort: try to create a temporary textarea and copy
+  if (typeof document !== "undefined") {
+    try {
+      const textarea = document.createElement("textarea");
+      textarea.value = content;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      const success = document.execCommand("copy");
+      document.body.removeChild(textarea);
+      return success;
+    } catch (error) {
+      console.warn("[Sharing] Fallback copy failed:", error);
+      return false;
+    }
+  }
+
+  return false;
 }
 
 /**

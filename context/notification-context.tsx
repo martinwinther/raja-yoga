@@ -110,15 +110,22 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
       return;
     }
 
+    // TypeScript: messaging is checked above, but we need to capture it for the async function
+    const messagingInstance = messaging;
+    if (!messagingInstance) {
+      return;
+    }
+
     const requestToken = async () => {
       try {
+
         const vapidKey = config.firebaseMessaging.vapidKey;
         if (!vapidKey) {
           logger.warn("VAPID key not configured", undefined, { userId: user.uid });
           return;
         }
 
-        const currentToken = await getFCMToken(messaging, {
+        const currentToken = await getFCMToken(messagingInstance, {
           vapidKey,
         });
 
@@ -164,7 +171,9 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!messaging || permission !== "granted") return;
 
-    const unsubscribe = onFCMMessage(messaging, (payload) => {
+    // TypeScript: messaging is checked above
+    const messagingInstance = messaging;
+    const unsubscribe = onFCMMessage(messagingInstance, (payload) => {
       logger.info("Foreground message received", undefined, { payload });
       
       // Show notification if browser supports it

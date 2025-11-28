@@ -202,12 +202,13 @@ function addDailyNotesSection(
     if (day.week !== currentWeek) {
       currentWeek = day.week;
       const weekData = YOGA_PROGRAM[currentWeek - 1];
+      const weekTheme = weekData?.theme || "";
       
       yPos += 5;
       doc.setFontSize(11);
       doc.setTextColor(80, 80, 80);
       doc.setFont("helvetica", "bold");
-      doc.text(`Week ${currentWeek}: ${weekData?.theme || ""}`, margin, yPos);
+      doc.text(`Week ${currentWeek}: ${weekTheme}`, margin, yPos);
       yPos += 8;
     }
     
@@ -314,13 +315,14 @@ function addWeeklyReflectionsSection(
     }
     
     const weekData = YOGA_PROGRAM[week.weekNumber - 1];
+    const weekTheme = weekData?.theme || "";
     
     // Week header
     yPos += 5;
     doc.setFontSize(11);
     doc.setTextColor(80, 80, 80);
     doc.setFont("helvetica", "bold");
-    doc.text(`Week ${week.weekNumber}: ${weekData?.theme || ""}`, margin, yPos);
+    doc.text(`Week ${week.weekNumber}: ${weekTheme}`, margin, yPos);
     yPos += 6;
     
     // Flags
