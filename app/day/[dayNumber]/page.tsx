@@ -17,20 +17,12 @@ import {
   formatDailyNoteForSharing,
   formatWeeklyReflectionForSharing,
 } from "../../../lib/sharing";
+import { formatDate } from "../../../lib/date-format";
 
 interface DayPageProps {
   params: {
     dayNumber: string;
   };
-}
-
-function formatDate(date: Date | null): string | null {
-  if (!date) return null;
-  return date.toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
 }
 
 export default function DayPage({ params }: DayPageProps) {

@@ -11,22 +11,11 @@ import type { DayProgress, WeekProgress, AppSettings } from "../types/app";
 import { getDateForDayNumber } from "./progress-time";
 import { getWeekForDay, getDayIndexInWeek, YOGA_PROGRAM, TOTAL_DAYS } from "../data/yogaProgram";
 import { computeStats } from "./progress-stats";
+import { formatDate, formatDateLong } from "./date-format";
 
 interface PDFOptions {
   progressState: ProgressState;
   userEmail?: string | null;
-}
-
-/**
- * Format a date for display in the PDF
- */
-function formatDate(date: Date | null): string {
-  if (!date) return "—";
-  return date.toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
 }
 
 /**
@@ -79,11 +68,7 @@ function addSummarySection(
   doc.setFontSize(9);
   doc.setTextColor(100, 100, 100);
   doc.setFont("helvetica", "normal");
-  const exportDate = new Date().toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
+  const exportDate = formatDateLong(new Date());
   doc.text(`Exported on ${exportDate}`, 20, yPos);
   yPos += 8;
   
@@ -93,7 +78,7 @@ function addSummarySection(
   }
   
   if (settings.startDate) {
-    const startDate = formatDate(new Date(settings.startDate));
+    const startDate = formatDateLong(new Date(settings.startDate));
     doc.text(`Journey started: ${startDate}`, 20, yPos);
     yPos += 8;
   }
@@ -213,7 +198,7 @@ function addDailyNotesSection(
     }
     
     // Day entry
-    const dateStr = formatDate(day.date);
+    const dateStr = formatDate(day.date) ?? "—";
     const dayLabel = `Day ${day.dayIndex} (${dateStr})`;
     
     doc.setFontSize(9);

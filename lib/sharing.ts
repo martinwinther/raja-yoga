@@ -7,6 +7,8 @@
  * - Progress statistics
  */
 
+import { formatDateLong } from "./date-format";
+
 /**
  * Get branded footer for shared content
  */
@@ -270,11 +272,7 @@ export function formatProgressForSharing(options: {
 
   if (settings.startDate) {
     const startDate = new Date(settings.startDate);
-    const formattedDate = startDate.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+    const formattedDate = formatDateLong(startDate);
     content += `\nJourney started: ${formattedDate}\n`;
   }
 

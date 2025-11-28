@@ -3,17 +3,17 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 
-const COOKIE_CONSENT_KEY = "dailysutra-cookie-consent";
+const COOKIE_NOTICE_KEY = "dailysutra-cookie-notice-dismissed";
 
 export function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false);
 
   useEffect(() => {
-    // Check if consent has been given
+    // Check if notice has been dismissed
     if (typeof window === "undefined") return;
 
-    const consent = localStorage.getItem(COOKIE_CONSENT_KEY);
-    if (!consent) {
+    const dismissed = localStorage.getItem(COOKIE_NOTICE_KEY);
+    if (!dismissed) {
       // Small delay to avoid flash on page load
       const timer = setTimeout(() => {
         setShowBanner(true);
@@ -22,20 +22,11 @@ export function CookieConsent() {
     }
   }, []);
 
-  const handleAccept = () => {
+  const handleDismiss = () => {
     if (typeof window === "undefined") return;
-    localStorage.setItem(COOKIE_CONSENT_KEY, "accepted");
-    localStorage.setItem(`${COOKIE_CONSENT_KEY}-date`, new Date().toISOString());
+    localStorage.setItem(COOKIE_NOTICE_KEY, "true");
+    localStorage.setItem(`${COOKIE_NOTICE_KEY}-date`, new Date().toISOString());
     setShowBanner(false);
-  };
-
-  const handleDecline = () => {
-    if (typeof window === "undefined") return;
-    localStorage.setItem(COOKIE_CONSENT_KEY, "declined");
-    localStorage.setItem(`${COOKIE_CONSENT_KEY}-date`, new Date().toISOString());
-    setShowBanner(false);
-    // Note: Declining will break functionality, but we respect user choice
-    // The app will still try to use localStorage for essential features
   };
 
   if (!showBanner) return null;
@@ -55,7 +46,7 @@ export function CookieConsent() {
                 id="cookie-consent-title"
                 className="text-sm font-semibold text-[hsl(var(--text))]"
               >
-                Cookie &amp; Storage Consent
+                Essential Cookies &amp; Storage
               </h3>
               <p
                 id="cookie-consent-description"
@@ -63,7 +54,7 @@ export function CookieConsent() {
               >
                 We use <strong className="text-[hsl(var(--text))]">localStorage</strong> to save
                 your journey progress locally and <strong className="text-[hsl(var(--text))]">Firebase cookies</strong> for
-                secure authentication. These are essential for the app to function.{" "}
+                secure authentication. These are essential for the app to function and do not require consent.{" "}
                 <Link
                   href="/privacy"
                   className="text-[hsl(var(--accent))] hover:underline"
@@ -73,20 +64,13 @@ export function CookieConsent() {
                 .
               </p>
             </div>
-            <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+            <div className="flex items-center">
               <button
-                onClick={handleAccept}
+                onClick={handleDismiss}
                 className="btn-primary whitespace-nowrap text-xs px-4 py-2"
-                aria-label="Accept cookies and storage"
+                aria-label="Dismiss cookie notice"
               >
-                Accept
-              </button>
-              <button
-                onClick={handleDecline}
-                className="btn-ghost whitespace-nowrap text-xs px-4 py-2"
-                aria-label="Decline cookies and storage"
-              >
-                Decline
+                Got it
               </button>
             </div>
           </div>

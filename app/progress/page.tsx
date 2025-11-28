@@ -20,15 +20,7 @@ import {
 } from "../../data/yogaProgram";
 import { getDateForDayNumber } from "../../lib/progress-time";
 import Link from "next/link";
-
-function formatDate(date: Date | null): string | null {
-  if (!date) return null;
-  return date.toLocaleDateString(undefined, {
-    year: "numeric",
-    month: "short",
-    day: "numeric",
-  });
-}
+import { formatDate } from "../../lib/date-format";
 
 export default function ProgressPage() {
   const { loading: authLoading } = useAuth();
