@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { PageHeader } from "../../components/page-header";
 import { GlassCard } from "../../components/glass-card";
 import {
@@ -24,7 +25,8 @@ export default function SettingsPage() {
     isActivePaid,
     isExpired,
   } = useSubscription();
-  const { user, authLoading, changeEmail, changePassword, sendPasswordReset, authError } = useAuth();
+  const { user, authLoading, changeEmail, changePassword, sendPasswordReset, signOut, authError } = useAuth();
+  const router = useRouter();
   const {
     permission,
     preferences,
@@ -55,6 +57,12 @@ export default function SettingsPage() {
   const [passwordResetError, setPasswordResetError] = useState<string | null>(null);
   const [passwordResetSuccess, setPasswordResetSuccess] = useState(false);
   const [resetEmail, setResetEmail] = useState("");
+
+  // Delete account state
+  const [deleteAccountLoading, setDeleteAccountLoading] = useState(false);
+  const [deleteAccountError, setDeleteAccountError] = useState<string | null>(null);
+  const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
+  const [deleteConfirmText, setDeleteConfirmText] = useState("");
 
   // Update reset email when user loads
   useEffect(() => {
@@ -318,6 +326,66 @@ export default function SettingsPage() {
       setPasswordResetError(authError || "Failed to send password reset email");
     } finally {
       setPasswordResetLoading(false);
+    }
+  };
+
+  const handleDeleteAccount = async () => {
+    if (!user) return;
+
+    // Final confirmation
+    if (!showDeleteConfirm) {
+      setShowDeleteConfirm(true);
+      return;
+    }
+
+    if (deleteConfirmText !== "DELETE") {
+      setDeleteAccountError("Please type DELETE to confirm");
+      return;
+    }
+
+    setDeleteAccountLoading(true);
+    setDeleteAccountError(null);
+
+    try {
+      // Get ID token for authentication
+      const idToken = await user.getIdToken();
+
+      // Call delete account API
+      const res = await fetch("/api/delete-account", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          uid: user.uid,
+          idToken,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error || "Failed to delete account");
+      }
+
+      // Clear localStorage
+      try {
+        localStorage.removeItem(PROGRESS_STORAGE_KEY);
+        localStorage.removeItem("dailysutra-cookie-notice-dismissed");
+      } catch (error) {
+        logger.warn("Failed to clear localStorage", error);
+      }
+
+      // Sign out (this will redirect)
+      await signOut();
+
+      // Redirect to home
+      router.push("/");
+    } catch (error: any) {
+      logger.error("Failed to delete account", error, { userId: user.uid });
+      setDeleteAccountError(
+        error?.message || "Failed to delete account. Please contact support@dailysutra.app"
+      );
+      setDeleteAccountLoading(false);
     }
   };
 
@@ -760,6 +828,77 @@ export default function SettingsPage() {
             Imported files completely replace your current progress. Only use
             backups that were exported from this app.
           </p>
+        </div>
+      </GlassCard>
+
+      <div className="flex items-center justify-between px-6">
+        <h2 id="delete-account-heading" className="text-sm font-medium uppercase tracking-wide text-[hsl(var(--muted))]">
+          Delete Account
+        </h2>
+      </div>
+
+      <GlassCard>
+        <div className="-mx-6 rounded-lg bg-white/6 px-6 py-4 shadow-[0_4px_12px_rgba(0,0,0,0.3)] backdrop-blur-sm transition-all duration-200 ease-out hover:-translate-y-1 hover:shadow-[0_6px_16px_rgba(0,0,0,0.4)]">
+          <p className="text-sm text-[hsl(var(--muted))]">
+            Permanently delete your account and all associated data. This action cannot be undone. Your journey progress, notes, and account information will be permanently deleted.
+          </p>
+          
+          {showDeleteConfirm ? (
+            <div className="mt-4 space-y-3">
+              <p className="text-xs text-red-300 font-medium">
+                This action is permanent and cannot be undone. All your data will be deleted.
+              </p>
+              <div className="flex flex-col gap-2">
+                <label className="text-sm text-[hsl(var(--muted))]">
+                  Type <strong className="text-[hsl(var(--text))]">DELETE</strong> to confirm:
+                </label>
+                <input
+                  type="text"
+                  value={deleteConfirmText}
+                  onChange={(e) => setDeleteConfirmText(e.target.value)}
+                  placeholder="DELETE"
+                  className="rounded-xl border border-[hsla(var(--border),0.4)] bg-white/5 px-3 py-2 text-sm text-[hsl(var(--text))] outline-none focus:border-[hsl(var(--accent))] focus:bg-white/7"
+                  disabled={deleteAccountLoading || authLoading}
+                />
+              </div>
+              {deleteAccountError && (
+                <p className="text-xs text-red-300">{deleteAccountError}</p>
+              )}
+              <div className="flex flex-wrap gap-2">
+                <button
+                  type="button"
+                  onClick={handleDeleteAccount}
+                  disabled={deleteAccountLoading || authLoading || deleteConfirmText !== "DELETE"}
+                  className="btn-primary bg-red-600/80 hover:bg-red-600/90 text-white"
+                >
+                  {deleteAccountLoading ? "Deleting account…" : "Permanently Delete Account"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setShowDeleteConfirm(false);
+                    setDeleteConfirmText("");
+                    setDeleteAccountError(null);
+                  }}
+                  className="btn-ghost"
+                  disabled={deleteAccountLoading || authLoading}
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="mt-4">
+              <button
+                type="button"
+                onClick={handleDeleteAccount}
+                disabled={deleteAccountLoading || authLoading}
+                className="btn-primary bg-red-600/80 hover:bg-red-600/90 text-white"
+              >
+                Delete Account
+              </button>
+            </div>
+          )}
         </div>
       </GlassCard>
     </div>
