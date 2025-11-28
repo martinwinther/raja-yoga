@@ -18,13 +18,33 @@ export const metadata: Metadata = {
       { url: "/icons/favicon-16x16.png", sizes: "16x16", type: "image/png" },
       { url: "/icons/favicon-32x32.png", sizes: "32x32", type: "image/png" },
       { url: "/icons/favicon.ico", sizes: "any" },
+      { url: "/icons/android-chrome-192x192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icons/android-chrome-512x512.png", sizes: "512x512", type: "image/png" },
     ],
-    apple: "/icons/apple-touch-icon.png",
+    apple: [
+      { url: "/icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
   },
   appleWebApp: {
     capable: true,
     statusBarStyle: "black-translucent",
     title: "Daily Sutra",
+  },
+  other: {
+    "mobile-web-app-capable": "yes",
+    "apple-mobile-web-app-capable": "yes",
+  },
+  openGraph: {
+    title: "Daily Sutra",
+    description:
+      "A 52-week guided journey through the Yoga Sūtras with daily micro-practices, notes, and progress tracking.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Daily Sutra",
+    description:
+      "A 52-week guided journey through the Yoga Sūtras with daily micro-practices, notes, and progress tracking.",
   },
 };
 
@@ -32,7 +52,7 @@ export const viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover" as const,
-  themeColor: "#111827",
+  themeColor: "#1f2329",
 };
 
 export default function RootLayout({
