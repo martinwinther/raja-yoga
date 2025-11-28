@@ -5,6 +5,12 @@ import { GlassCard } from "../../components/glass-card";
 import { useProgress } from "../../context/progress-context";
 import { useAuth } from "../../context/auth-context";
 import { computeStats } from "../../lib/progress-stats";
+import { ShareButton } from "../../components/share-button";
+import {
+  formatDailyNoteForSharing,
+  formatWeeklyReflectionForSharing,
+  formatProgressForSharing,
+} from "../../lib/sharing";
 import {
   TOTAL_DAYS,
   TOTAL_WEEKS,
