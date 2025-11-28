@@ -1,6 +1,9 @@
 import { collection, query, orderBy, getDocs } from "firebase/firestore";
 import { db } from "./client";
 import type { GlossaryTerm } from "../../types/glossary";
+import { createLogger } from "../logger";
+
+const logger = createLogger("FirebaseGlossary");
 
 export async function getAllGlossaryTerms(): Promise<GlossaryTerm[]> {
   try {
@@ -22,7 +25,7 @@ export async function getAllGlossaryTerms(): Promise<GlossaryTerm[]> {
 
     return terms;
   } catch (error) {
-    console.error("Error fetching glossary terms:", error);
+    logger.error("Error fetching glossary terms", error, { action: "getAllGlossaryTerms" });
     throw error;
   }
 }

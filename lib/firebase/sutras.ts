@@ -1,6 +1,9 @@
 import { collection, query, where, orderBy, getDocs } from "firebase/firestore";
 import { db } from "./client";
 import type { Sutra } from "../../types/sutra";
+import { createLogger } from "../logger";
+
+const logger = createLogger("FirebaseSutras");
 
 export async function getSutrasByBook(book: string): Promise<Sutra[]> {
   try {
@@ -28,7 +31,7 @@ export async function getSutrasByBook(book: string): Promise<Sutra[]> {
 
     return sutras;
   } catch (error) {
-    console.error("Error fetching sutras:", error);
+    logger.error("Error fetching sutras", error, { action: "getSutrasByBook", book });
     throw error;
   }
 }

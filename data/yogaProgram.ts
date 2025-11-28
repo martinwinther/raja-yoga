@@ -469,10 +469,10 @@ export function getGlobalDayNumberFromWeekAndDay(
   return (weekNumber - 1) * DAYS_PER_WEEK + dayIndex;
 }
 
+// Import logger only in non-production (to avoid bundling in production)
 if (process.env.NODE_ENV !== "production") {
   // Basic sanity checks for the static program.
   if (YOGA_PROGRAM.length !== TOTAL_WEEKS) {
-    // eslint-disable-next-line no-console
     console.warn(
       `[YogaProgram] Expected ${TOTAL_WEEKS} weeks, found ${YOGA_PROGRAM.length}.`
     );
@@ -481,7 +481,6 @@ if (process.env.NODE_ENV !== "production") {
     const weeks = YOGA_PROGRAM.map((w) => w.week);
     const uniqueWeeks = new Set(weeks);
     if (weeks.length !== uniqueWeeks.size) {
-      // eslint-disable-next-line no-console
       console.warn(
         "[YogaProgram] Duplicate week numbers found in YOGA_PROGRAM."
       );

@@ -6,6 +6,9 @@ import { GlassCard } from "../../components/glass-card";
 import { GlossaryTermCard } from "../../components/glossary-term";
 import { getAllGlossaryTerms } from "../../lib/firebase/glossary";
 import type { GlossaryTerm } from "../../types/glossary";
+import { createLogger } from "../../lib/logger";
+
+const logger = createLogger("Glossary");
 
 export default function GlossaryPage() {
   const [terms, setTerms] = useState<GlossaryTerm[]>([]);
@@ -21,7 +24,7 @@ export default function GlossaryPage() {
         setTerms(fetchedTerms);
         setError(null);
       } catch (err) {
-        console.error("Failed to fetch glossary terms:", err);
+        logger.error("Failed to fetch glossary terms", err, { action: "fetchGlossaryTerms" });
         setError("Failed to load glossary terms");
       } finally {
         setLoading(false);

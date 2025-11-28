@@ -11,6 +11,9 @@ import { doc, getDoc, onSnapshot, setDoc, Timestamp } from "firebase/firestore";
 import { db } from "../lib/firebase/client";
 import { useAuth } from "./auth-context";
 import { useAppStatus } from "./app-status-context";
+import { createLogger } from "../lib/logger";
+
+const logger = createLogger("Subscription");
 
 export type SubscriptionStatus = "none" | "trial" | "active" | "expired";
 
@@ -93,8 +96,7 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
           setSubLoading(false);
         },
         (error) => {
-          // eslint-disable-next-line no-console
-          console.warn("[Subscription] onSnapshot error:", error);
+          logger.warn("onSnapshot error", error, { action: "subscribeToUserDoc", userId: user.uid });
           setLastError("Failed to sync with server. Working from local copy.");
           setStatus("none");
           setSubLoading(false);

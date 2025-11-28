@@ -1,6 +1,9 @@
 import Stripe from "stripe";
 import { NextRequest, NextResponse } from "next/server";
 import { config } from "../../../lib/config";
+import { createServerLogger } from "../../../lib/logger";
+
+const logger = createServerLogger("create-checkout-session");
 
 const stripe = new Stripe(config.stripe.secretKey);
 
@@ -44,7 +47,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ url: session.url });
 
   } catch (error) {
-    console.error("[create-checkout-session] error", error);
+    logger.error("Failed to create checkout session", error, { action: "createCheckoutSession" });
     return NextResponse.json(
       { error: "Failed to create checkout session" },
       { status: 500 }

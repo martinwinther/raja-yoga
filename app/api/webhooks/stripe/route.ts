@@ -3,6 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { getFirestore } from "firebase-admin/firestore";
 import { initializeApp, getApps, cert, App } from "firebase-admin/app";
 import { config } from "../../../../lib/config";
+import { createServerLogger } from "../../../../lib/logger";
+
+const logger = createServerLogger("webhook");
 
 const stripe = new Stripe(config.stripe.secretKey);
 
@@ -39,7 +42,7 @@ export async function POST(request: NextRequest) {
   try {
     event = stripe.webhooks.constructEvent(body, signature, config.stripe.webhookSecret);
   } catch (error: any) {
-    console.error("[webhook] Signature verification failed:", error.message);
+    logger.error("Signature verification failed", error, { action: "verifySignature" });
     return NextResponse.json(
       { error: `Webhook signature verification failed: ${error.message}` },
       { status: 400 }
@@ -50,13 +53,13 @@ export async function POST(request: NextRequest) {
     const session = event.data.object as Stripe.Checkout.Session;
 
     if (session.payment_status !== "paid") {
-      console.warn("[webhook] Session not paid:", session.id);
+      logger.warn("Session not paid", undefined, { sessionId: session.id, paymentStatus: session.payment_status });
       return NextResponse.json({ received: true });
     }
 
     const firebaseUid = session.metadata?.firebaseUid;
     if (!firebaseUid) {
-      console.error("[webhook] Missing firebaseUid in session metadata:", session.id);
+      logger.error("Missing firebaseUid in session metadata", undefined, { sessionId: session.id });
       return NextResponse.json(
         { error: "Missing firebaseUid in session metadata" },
         { status: 400 }
@@ -74,9 +77,9 @@ export async function POST(request: NextRequest) {
         { merge: true }
       );
 
-      console.log("[webhook] Updated user subscription:", firebaseUid);
+      logger.log("Updated user subscription", { firebaseUid, sessionId: session.id });
     } catch (error) {
-      console.error("[webhook] Failed to update user:", error);
+      logger.error("Failed to update user", error, { firebaseUid, sessionId: session.id });
       return NextResponse.json(
         { error: "Failed to update user subscription" },
         { status: 500 }

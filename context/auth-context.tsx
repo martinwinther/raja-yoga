@@ -21,6 +21,9 @@ import {
   User,
 } from "firebase/auth";
 import { auth } from "../lib/firebase/client";
+import { createLogger } from "../lib/logger";
+
+const logger = createLogger("Auth");
 
 interface AuthContextValue {
   user: User | null;
@@ -62,8 +65,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       await sendEmailVerification(userCredential.user);
       // onAuthStateChanged will update user
     } catch (error: any) {
-      // eslint-disable-next-line no-console
-      console.warn("[Auth] signUp error:", error);
+      logger.warn("signUp error", error, { action: "signUp" });
       setAuthError(
         error?.message ?? "Could not sign up. Please check your details."
       );
@@ -79,8 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       await signInWithEmailAndPassword(auth, email, password);
     } catch (error: any) {
-      // eslint-disable-next-line no-console
-      console.warn("[Auth] signIn error:", error);
+      logger.warn("signIn error", error, { action: "signIn" });
       setAuthError(
         error?.message ?? "Could not sign in. Please check your credentials."
       );
@@ -96,8 +97,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       await firebaseSignOut(auth);
     } catch (error: any) {
-      // eslint-disable-next-line no-console
-      console.warn("[Auth] signOut error:", error);
+      logger.warn("signOut error", error, { action: "signOut" });
       setAuthError(error?.message ?? "Could not sign out.");
       throw error;
     } finally {
@@ -116,8 +116,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       await sendEmailVerification(user);
     } catch (error: any) {
-      // eslint-disable-next-line no-console
-      console.warn("[Auth] resendVerificationEmail error:", error);
+      logger.warn("resendVerificationEmail error", error, { action: "resendVerificationEmail" });
       setAuthError(error?.message ?? "Could not send verification email.");
       throw error;
     } finally {
@@ -144,8 +143,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Send verification email to new address
       await sendEmailVerification(user);
     } catch (error: any) {
-      // eslint-disable-next-line no-console
-      console.warn("[Auth] changeEmail error:", error);
+      logger.warn("changeEmail error", error, { action: "changeEmail" });
       setAuthError(error?.message ?? "Could not change email. Please check your current password.");
       throw error;
     } finally {
@@ -169,8 +167,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       // Update password
       await updatePassword(user, newPassword);
     } catch (error: any) {
-      // eslint-disable-next-line no-console
-      console.warn("[Auth] changePassword error:", error);
+      logger.warn("changePassword error", error, { action: "changePassword" });
       setAuthError(error?.message ?? "Could not change password. Please check your current password.");
       throw error;
     } finally {
@@ -184,8 +181,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     try {
       await sendPasswordResetEmail(auth, email);
     } catch (error: any) {
-      // eslint-disable-next-line no-console
-      console.warn("[Auth] sendPasswordReset error:", error);
+      logger.warn("sendPasswordReset error", error, { action: "sendPasswordReset" });
       setAuthError(error?.message ?? "Could not send password reset email.");
       throw error;
     } finally {

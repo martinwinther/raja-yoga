@@ -1,6 +1,9 @@
 import Stripe from "stripe";
 import { NextRequest, NextResponse } from "next/server";
 import { config } from "../../../lib/config";
+import { createServerLogger } from "../../../lib/logger";
+
+const logger = createServerLogger("verify-session");
 
 const stripe = new Stripe(config.stripe.secretKey);
 
@@ -39,7 +42,7 @@ export async function POST(request: NextRequest) {
       paymentStatus: session.payment_status,
     });
   } catch (error: any) {
-    console.error("[verify-session] error", error);
+    logger.error("Failed to verify session", error, { action: "verifySession" });
     return NextResponse.json(
       { error: "Failed to verify session", verified: false },
       { status: 500 }

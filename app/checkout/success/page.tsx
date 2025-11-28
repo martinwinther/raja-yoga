@@ -8,6 +8,9 @@ import { db } from "../../../lib/firebase/client";
 import { useAuth } from "../../../context/auth-context";
 import { PageHeader } from "../../../components/page-header";
 import { GlassCard } from "../../../components/glass-card";
+import { createLogger } from "../../../lib/logger";
+
+const logger = createLogger("CheckoutSuccess");
 
 function CheckoutSuccessContent() {
   const { user } = useAuth();
@@ -65,7 +68,7 @@ function CheckoutSuccessContent() {
 
         setUpdated(true);
       } catch (err: any) {
-        console.warn("[CheckoutSuccess] Failed to verify or update:", err);
+        logger.warn("Failed to verify or update", err, { action: "verifyPayment", sessionId });
         setError(
           err?.message ||
             "We could not verify your payment. The webhook will update your account shortly, or you can contact support."

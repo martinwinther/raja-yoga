@@ -7,6 +7,9 @@ import { BookNav } from "../../../components/book-nav";
 import { SutraAccordion } from "../../../components/sutra-accordion";
 import { getSutrasByBook } from "../../../lib/firebase/sutras";
 import type { Sutra } from "../../../types/sutra";
+import { createLogger } from "../../../lib/logger";
+
+const logger = createLogger("Sutras");
 
 interface BookPageProps {
   params: {
@@ -48,7 +51,7 @@ export default function BookPage({ params }: BookPageProps) {
         setSutras(fetchedSutras);
         setError(null);
       } catch (err) {
-        console.error("Failed to fetch sutras:", err);
+        logger.error("Failed to fetch sutras", err, { action: "fetchSutras", book: bookValue });
         setError("Failed to load sutras");
       } finally {
         setLoading(false);

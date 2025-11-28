@@ -7,6 +7,9 @@ import { db } from "../lib/firebase/client";
 import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { useAuth } from "./auth-context";
 import { useAppStatus } from "./app-status-context";
+import { createLogger } from "../lib/logger";
+
+const logger = createLogger("Progress");
 import { useSubscription } from "./subscription-context";
 
 export interface ProgressState {
@@ -214,11 +217,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
         dispatch({ type: "HYDRATE_FROM_STORAGE", payload: parsed });
       }
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn(
-        "[ProgressProvider] Failed to parse localStorage state.",
-        error
-      );
+      logger.warn("Failed to parse localStorage state", error, { action: "hydrateFromStorage" });
     }
   }, []);
 
@@ -230,11 +229,7 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
       const serialized = JSON.stringify(state);
       window.localStorage.setItem(PROGRESS_STORAGE_KEY, serialized);
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn(
-        "[ProgressProvider] Failed to write localStorage state.",
-        error
-      );
+      logger.warn("Failed to write localStorage state", error, { action: "persistToStorage" });
     }
   }, [state]);
 
@@ -296,8 +291,10 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
           });
         }
       } catch (error: any) {
-        // eslint-disable-next-line no-console
-        console.warn("[Progress] Failed to hydrate from Firestore:", error);
+        logger.warn("Failed to hydrate from Firestore", error, { 
+          action: "hydrateFromFirestore",
+          userId: user.uid 
+        });
         const isPermissionDenied = error?.code === "permission-denied";
         setLastError(
           isPermissionDenied
@@ -358,8 +355,10 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
           { merge: true }
         );
       } catch (error: any) {
-        // eslint-disable-next-line no-console
-        console.warn("[Progress] Failed to persist to Firestore:", error);
+        logger.warn("Failed to persist to Firestore", error, { 
+          action: "persistToFirestore",
+          userId: user.uid 
+        });
         const isPermissionDenied = error?.code === "permission-denied";
         // Don't show error for permission-denied during normal operation
         // Client-side validation should prevent this, but if it happens,

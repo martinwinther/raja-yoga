@@ -10,6 +10,9 @@ import {
 } from "../../context/progress-context";
 import { useSubscription } from "../../context/subscription-context";
 import { useAuth } from "../../context/auth-context";
+import { createLogger } from "../../lib/logger";
+
+const logger = createLogger("Settings");
 
 export default function SettingsPage() {
   const { settings, dispatch } = useProgress();
@@ -99,8 +102,7 @@ export default function SettingsPage() {
       document.body.removeChild(link);
       URL.revokeObjectURL(url);
     } catch (error) {
-      // eslint-disable-next-line no-console
-      console.warn("[Settings] Failed to export progress:", error);
+      logger.warn("Failed to export progress", error, { action: "exportProgress" });
       window.alert("Sorry, something went wrong while exporting your data.");
     }
   };
@@ -142,8 +144,7 @@ export default function SettingsPage() {
         // localStorage persistence effect in ProgressProvider will run automatically
         window.alert("Import completed. Your journey state has been updated.");
       } catch (error) {
-        // eslint-disable-next-line no-console
-        console.warn("[Settings] Failed to import progress:", error);
+        logger.warn("Failed to import progress", error, { action: "importProgress" });
         window.alert(
           "Sorry, this file could not be imported. Make sure it is an unmodified backup from this app."
         );
@@ -189,7 +190,7 @@ export default function SettingsPage() {
 
       window.location.href = data.url;
     } catch (error: any) {
-      console.warn("[Settings] Upgrade error:", error);
+      logger.warn("Upgrade error", error, { action: "createCheckoutSession", userId: user?.uid });
       setUpgradeError(
         error?.message || "Something went wrong when starting checkout."
       );
