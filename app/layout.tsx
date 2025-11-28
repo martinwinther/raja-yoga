@@ -5,6 +5,7 @@ import { MainNav } from "../components/main-nav";
 import { AppStatusBanner } from "../components/app-status-banner";
 import { SkipLink } from "../components/skip-link";
 import { KeyboardShortcuts } from "../components/keyboard-shortcuts";
+import { Footer } from "../components/footer";
 import { AuthProvider } from "../context/auth-context";
 import { SubscriptionProvider } from "../context/subscription-context";
 import { ProgressProvider } from "../context/progress-context";
@@ -86,6 +87,7 @@ export default function RootLayout({
                         {children}
                       </div>
                     </main>
+                    <Footer />
                   </div>
                   </ProgressProvider>
                 </SubscriptionProvider>

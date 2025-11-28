@@ -1,0 +1,12 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /auth
+Disallow: /settings
+Disallow: /checkout/
+Disallow: /day/
+Disallow: /progress
+
+# Sitemap
+Sitemap: https://dailysutra.app/sitemap.xml
+
