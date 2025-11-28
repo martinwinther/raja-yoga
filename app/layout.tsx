@@ -6,6 +6,8 @@ import { AppStatusBanner } from "../components/app-status-banner";
 import { SkipLink } from "../components/skip-link";
 import { KeyboardShortcuts } from "../components/keyboard-shortcuts";
 import { Footer } from "../components/footer";
+import { CookieConsent } from "../components/cookie-consent";
+import { CookieConsentProvider } from "../context/cookie-consent-context";
 import { AuthProvider } from "../context/auth-context";
 import { SubscriptionProvider } from "../context/subscription-context";
 import { ProgressProvider } from "../context/progress-context";
@@ -68,32 +70,35 @@ export default function RootLayout({
     <html lang="en" className="dark" suppressHydrationWarning>
       <body>
         <ThemeProvider>
-          <AppStatusProvider>
-            <AuthProvider>
-              <NotificationProvider>
-                <SubscriptionProvider>
-                  <ProgressProvider>
-                  <div className="flex min-h-screen flex-col">
-                    <SkipLink />
-                    <KeyboardShortcuts />
-                    <header className="glass-nav sticky top-0 z-20" role="banner">
-                      <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-                        <MainNav />
-                      </div>
-                    </header>
-                    <AppStatusBanner />
-                    <main id="main-content" className="flex-1" role="main">
-                      <div className="mx-auto max-w-5xl px-4 py-8 sm:py-10">
-                        {children}
-                      </div>
-                    </main>
-                    <Footer />
-                  </div>
-                  </ProgressProvider>
-                </SubscriptionProvider>
-              </NotificationProvider>
-            </AuthProvider>
-          </AppStatusProvider>
+          <CookieConsentProvider>
+            <AppStatusProvider>
+              <AuthProvider>
+                <NotificationProvider>
+                  <SubscriptionProvider>
+                    <ProgressProvider>
+                    <div className="flex min-h-screen flex-col">
+                      <SkipLink />
+                      <KeyboardShortcuts />
+                      <header className="glass-nav sticky top-0 z-20" role="banner">
+                        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+                          <MainNav />
+                        </div>
+                      </header>
+                      <AppStatusBanner />
+                      <main id="main-content" className="flex-1" role="main">
+                        <div className="mx-auto max-w-5xl px-4 py-8 sm:py-10">
+                          {children}
+                        </div>
+                      </main>
+                      <Footer />
+                      <CookieConsent />
+                    </div>
+                    </ProgressProvider>
+                  </SubscriptionProvider>
+                </NotificationProvider>
+              </AuthProvider>
+            </AppStatusProvider>
+          </CookieConsentProvider>
         </ThemeProvider>
       </body>
     </html>
