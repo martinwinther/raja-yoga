@@ -174,7 +174,7 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
     // TypeScript: messaging is checked above
     const messagingInstance = messaging;
     const unsubscribe = onFCMMessage(messagingInstance, (payload) => {
-      logger.info("Foreground message received", undefined, { payload });
+      logger.info("Foreground message received", { payload });
       
       // Show notification if browser supports it
       if ("Notification" in window && Notification.permission === "granted") {
