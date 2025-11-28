@@ -12,7 +12,8 @@ const firebaseConfig = {
   "apiKey": "AIzaSyC8q0HEuErmHpO_4tIVTni2_ZA86KfMozo",
   "authDomain": "raja-yoga-journey.firebaseapp.com",
   "projectId": "raja-yoga-journey",
-  "appId": "1:729974618674:web:7eb4fc7487ce0f30459a2b"
+  "appId": "1:729974618674:web:7eb4fc7487ce0f30459a2b",
+  "messagingSenderId": "729974618674"
 };
 
 firebase.initializeApp(firebaseConfig);

@@ -92,6 +92,7 @@ NEXT_PUBLIC_FIREBASE_API_KEY=your_firebase_api_key
 NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_project.firebaseapp.com
 NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
 NEXT_PUBLIC_FIREBASE_APP_ID=your_firebase_app_id
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id # Optional: Get from Firebase Console → Project Settings → Cloud Messaging (Sender ID)
 
 # Stripe Configuration
 NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
@@ -222,6 +223,8 @@ The app supports push notifications for daily practice reminders using Firebase 
    NEXT_PUBLIC_FIREBASE_VAPID_KEY=your_generated_vapid_key_here
    ```
    Paste the key you copied from step 1.
+   
+   **Note:** The `messagingSenderId` is automatically extracted from your `NEXT_PUBLIC_FIREBASE_APP_ID` (it's the numeric part between the colons, e.g., `1:729974618674:web:...`). If you need to override it, you can set `NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID` explicitly.
 
 3. **Generate service worker (after setting up Firebase config):**
    ```bash

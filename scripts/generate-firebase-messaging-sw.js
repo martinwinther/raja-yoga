@@ -29,11 +29,48 @@ try {
   console.warn("Could not load .env.local, using process.env directly");
 }
 
+// Ensure environment variables are loaded
+if (!process.env.NEXT_PUBLIC_FIREBASE_APP_ID && fs.existsSync(path.join(__dirname, "../.env.local"))) {
+  try {
+    const envPath = path.join(__dirname, "../.env.local");
+    const envContent = fs.readFileSync(envPath, "utf8");
+    envContent.split("\n").forEach((line) => {
+      const match = line.match(/^NEXT_PUBLIC_FIREBASE_APP_ID=(.*)$/);
+      if (match) {
+        process.env.NEXT_PUBLIC_FIREBASE_APP_ID = match[1].trim().replace(/^["']|["']$/g, "");
+      }
+    });
+  } catch (error) {
+    // Ignore
+  }
+}
+
+// Extract messagingSenderId from appId if not provided
+// AppId format: 1:SENDER_ID:platform:app_id
+function getMessagingSenderId() {
+  if (process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID) {
+    return process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID;
+  }
+  
+  // Try to extract from appId format: 1:SENDER_ID:platform:app_id
+  const appId = process.env.NEXT_PUBLIC_FIREBASE_APP_ID;
+  if (appId) {
+    const parts = appId.split(":");
+    if (parts.length >= 2) {
+      return parts[1];
+    }
+  }
+  
+  return "";
+}
+
+const senderId = getMessagingSenderId();
 const firebaseConfig = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "YOUR_API_KEY",
   authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "YOUR_AUTH_DOMAIN",
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "YOUR_PROJECT_ID",
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "YOUR_APP_ID",
+  ...(senderId ? { messagingSenderId: senderId } : {}),
 };
 
 const serviceWorkerContent = `/**
