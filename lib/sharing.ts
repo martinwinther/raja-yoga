@@ -11,7 +11,8 @@
  * Get branded footer for shared content
  */
 function getBrandedFooter(): string {
-  return "\n\n— Shared from DailySutra.app\nA 52-week journey through the Yoga Sūtras";
+  // Include URL so it becomes clickable in most apps
+  return "\n\n— Shared from DailySutra.app\nhttps://dailysutra.app\n\nA 52-week journey through the Yoga Sūtras";
 }
 
 /**
