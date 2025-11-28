@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import ReactMarkdown from "react-markdown";
 import { GlassCard } from "./glass-card";
 import type { GlossaryTerm } from "../types/glossary";
 
@@ -63,12 +64,16 @@ export function GlossaryTermCard({ term, definition }: GlossaryTermProps) {
         aria-hidden={!isExpanded}
       >
         <div className="mt-4 space-y-3 border-t border-[hsla(var(--border),0.3)] pt-4">
-          <div className="space-y-3 text-sm leading-relaxed text-[hsl(var(--text))]">
-            {definition.split("\n\n").map((paragraph, index) => (
-              <p key={index} className="whitespace-pre-wrap">
-                {paragraph}
-              </p>
-            ))}
+          <div className="prose prose-sm prose-invert max-w-none text-sm leading-relaxed text-[hsl(var(--text))]">
+            <ReactMarkdown
+              components={{
+                p: ({ children }) => <p className="mb-3 last:mb-0">{children}</p>,
+                strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+                em: ({ children }) => <em className="italic">{children}</em>,
+              }}
+            >
+              {definition}
+            </ReactMarkdown>
           </div>
         </div>
       </div>

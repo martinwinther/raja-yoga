@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import ReactMarkdown from "react-markdown";
 import { GlassCard } from "./glass-card";
 import type { Sutra } from "../types/sutra";
 
@@ -42,9 +43,17 @@ export function SutraAccordion({
             <h3 className="text-sm font-semibold text-[hsl(var(--text))]">
               {title}
             </h3>
-            <p className="text-sm leading-relaxed text-[hsl(var(--text))]">
-              {sutraText}
-            </p>
+            <div className="text-sm leading-relaxed text-[hsl(var(--text))]">
+              <ReactMarkdown
+                components={{
+                  p: ({ children }) => <p className="mb-0">{children}</p>,
+                  strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+                  em: ({ children }) => <em className="italic">{children}</em>,
+                }}
+              >
+                {sutraText}
+              </ReactMarkdown>
+            </div>
           </div>
           <div
             className={`flex-shrink-0 transition-transform duration-200 ease-out ${
@@ -81,12 +90,16 @@ export function SutraAccordion({
           <h4 className="text-xs font-medium uppercase tracking-wide text-[hsl(var(--muted))]">
             Commentary
           </h4>
-          <div className="space-y-3 text-sm leading-relaxed text-[hsl(var(--text))]">
-            {commentary.split("\n\n").map((paragraph, index) => (
-              <p key={index} className="whitespace-pre-wrap">
-                {paragraph}
-              </p>
-            ))}
+          <div className="prose prose-sm prose-invert max-w-none text-sm leading-relaxed text-[hsl(var(--text))]">
+            <ReactMarkdown
+              components={{
+                p: ({ children }) => <p className="mb-3 last:mb-0">{children}</p>,
+                strong: ({ children }) => <strong className="font-semibold">{children}</strong>,
+                em: ({ children }) => <em className="italic">{children}</em>,
+              }}
+            >
+              {commentary}
+            </ReactMarkdown>
           </div>
         </div>
       </div>
