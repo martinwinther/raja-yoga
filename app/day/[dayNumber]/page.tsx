@@ -321,11 +321,11 @@ export default function DayPage({ params }: DayPageProps) {
                 : "Editing locked – this content requires a paid subscription. You can still read past notes."
             }
             disabled={!canAccessThisDay}
-            aria-label="Today's practice note"
+            aria-label="Today&apos;s practice note"
             aria-describedby="daily-note-description"
           />
           <p id="daily-note-description" className="sr-only">
-            Jot down what you noticed in practice, any resistance, or a single sentence about how the day related to this week's theme.
+            Jot down what you noticed in practice, any resistance, or a single sentence about how the day related to this week&apos;s theme.
           </p>
         </div>
       </GlassCard>
@@ -426,7 +426,7 @@ export default function DayPage({ params }: DayPageProps) {
                   aria-describedby="weekly-reflection-description"
                 />
                 <p id="weekly-reflection-description" className="sr-only">
-                  A few lines about what shifted (or didn't) for you this week is enough.
+                  A few lines about what shifted (or didn&apos;t) for you this week is enough.
                 </p>
               </div>
             </div>
