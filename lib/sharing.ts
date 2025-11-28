@@ -11,7 +11,59 @@
  * Get branded footer for shared content
  */
 function getBrandedFooter(): string {
-  return "\n\n— Shared from Daily Sutra\nA 52-week journey through the Yoga Sūtras";
+  return "\n\n— Shared from DailySutra.app\nA 52-week journey through the Yoga Sūtras";
+}
+
+/**
+ * Strip markdown formatting from text
+ * Converts markdown to plain text for sharing
+ */
+function stripMarkdown(text: string): string {
+  if (!text) return "";
+  
+  let result = text;
+  
+  // Remove code blocks first (before processing other markdown)
+  result = result.replace(/```[\s\S]*?```/g, ""); // ```code blocks```
+  result = result.replace(/`([^`]+)`/g, "$1"); // `inline code`
+  
+  // Remove bold markers first (handle **bold** before *italic*)
+  // Process multiple times to handle nested or adjacent cases
+  let prevResult = "";
+  while (result !== prevResult) {
+    prevResult = result;
+    result = result.replace(/\*\*([^*]+?)\*\*/g, "$1"); // **bold**
+    result = result.replace(/__([^_]+?)__/g, "$1"); // __bold__
+  }
+  
+  // Remove italic markers (single asterisk/underscore)
+  // Process multiple times to handle all cases
+  prevResult = "";
+  while (result !== prevResult) {
+    prevResult = result;
+    result = result.replace(/\*([^*\n]+?)\*/g, "$1"); // *italic* (not spanning newlines)
+    result = result.replace(/_([^_\n]+?)_/g, "$1"); // _italic_ (not spanning newlines)
+  }
+  
+  // Remove links but keep text
+  result = result.replace(/\[([^\]]+)\]\([^\)]+\)/g, "$1"); // [text](url)
+  
+  // Remove headers
+  result = result.replace(/^#{1,6}\s+/gm, ""); // # headers
+  
+  // Remove horizontal rules
+  result = result.replace(/^---+$/gm, "");
+  
+  // Remove list markers
+  result = result.replace(/^[\s]*[-*+]\s+/gm, ""); // - * + list items
+  result = result.replace(/^[\s]*\d+\.\s+/gm, ""); // numbered list items
+  
+  // Clean up extra whitespace (but preserve paragraph breaks)
+  result = result.replace(/\n{3,}/g, "\n\n"); // max 2 newlines
+  result = result.replace(/[ \t]+/g, " "); // multiple spaces to single space
+  result = result.trim();
+  
+  return result;
 }
 
 /**
@@ -25,7 +77,7 @@ export async function shareContent(
   if (typeof navigator !== "undefined" && navigator.share) {
     try {
       await navigator.share({
-        title: title || "Daily Sutra",
+        title: title || "DailySutra.app",
         text: content,
       });
       return true;
@@ -152,11 +204,13 @@ export function formatSutraForSharing(options: {
   }
   content += "\n\n";
 
-  content += sutraText;
+  // Strip markdown from sutra text
+  content += stripMarkdown(sutraText);
   content += "\n\n";
 
   if (commentary) {
-    content += commentary;
+    // Strip markdown from commentary
+    content += stripMarkdown(commentary);
     content += "\n\n";
   }
 
@@ -175,7 +229,8 @@ export function formatGlossaryTermForSharing(options: {
   const { term, definition } = options;
 
   let content = `${term}\n\n`;
-  content += definition;
+  // Strip markdown from definition
+  content += stripMarkdown(definition);
   content += getBrandedFooter();
 
   return content;
@@ -198,7 +253,7 @@ export function formatProgressForSharing(options: {
 }): string {
   const { stats, settings } = options;
 
-  let content = "📿 Daily Sutra Journey Progress\n\n";
+  let content = "📿 DailySutra.app Journey Progress\n\n";
 
   content += `Days practiced: ${stats.daysPracticed} / 364\n`;
   content += `Weeks completed: ${stats.completedWeeks} / 52\n`;
