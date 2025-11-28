@@ -62,7 +62,7 @@ export default function TermsPage() {
                 <li>Notify us immediately of any unauthorized use</li>
               </ul>
               <p>
-                You must be at least 18 years old to create an account. By creating an account, you represent that you meet this age requirement.
+                <strong className="text-[hsl(var(--text))]">Age Requirement:</strong> You must be at least 18 years old to create an account and use Daily Sutra. By creating an account, you represent and warrant that you are at least 18 years of age and have the legal capacity to enter into these Terms.
               </p>
             </div>
           </section>

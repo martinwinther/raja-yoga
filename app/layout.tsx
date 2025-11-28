@@ -66,8 +66,36 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "https://dailysutra.app";
+
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Daily Sutra",
+    "description": "A 52-week guided journey through the Yoga Sūtras with daily micro-practices, notes, and progress tracking.",
+    "url": baseUrl,
+    "applicationCategory": "HealthApplication",
+    "operatingSystem": "Web",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD",
+      "description": "Free trial for 4 weeks, then one-time payment for full access"
+    },
+    "creator": {
+      "@type": "Organization",
+      "name": "Daily Sutra"
+    }
+  };
+
   return (
     <html lang="en" className="dark" suppressHydrationWarning>
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      </head>
       <body>
         <ThemeProvider>
           <CookieConsentProvider>

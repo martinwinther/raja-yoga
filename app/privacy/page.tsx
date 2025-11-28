@@ -186,7 +186,14 @@ export default function PrivacyPage() {
               8. Children&apos;s Privacy
             </h2>
             <p>
-              Daily Sutra is not intended for children under the age of 18. We do not knowingly collect personal information from children. If you believe we have collected information from a child, please contact us immediately.
+              Daily Sutra is not intended for children under the age of 18. We do not knowingly collect personal information from children under 18. If you are under 18, please do not use this service. If you believe we have collected information from a child under 18, please contact us immediately at{" "}
+              <a
+                href="mailto:support@dailysutra.app"
+                className="text-[hsl(var(--accent))] hover:underline"
+              >
+                support@dailysutra.app
+              </a>
+              {" "}and we will delete the information promptly.
             </p>
           </section>
 
