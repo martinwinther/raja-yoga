@@ -102,7 +102,10 @@ export default function PrivacyPage() {
                   Firebase (Google)
                 </h3>
                 <p>
-                  We use Firebase for authentication, data storage, and push notifications. Firebase&apos;s privacy practices are governed by Google&apos;s Privacy Policy. Your data is stored in Firebase&apos;s secure cloud infrastructure.
+                  We use Firebase for authentication, data storage, push notifications, and analytics. Firebase&apos;s privacy practices are governed by Google&apos;s Privacy Policy. Your data is stored in Firebase&apos;s secure cloud infrastructure.
+                </p>
+                <p className="mt-2">
+                  <strong className="text-[hsl(var(--text))]">Analytics:</strong> We use Firebase Analytics to understand how users interact with our service, including page views, feature usage, and conversion events. This helps us improve the service. Analytics data is anonymized and aggregated.
                 </p>
               </div>
               <div>

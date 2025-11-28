@@ -13,6 +13,8 @@ import { SubscriptionProvider } from "../context/subscription-context";
 import { ProgressProvider } from "../context/progress-context";
 import { AppStatusProvider } from "../context/app-status-context";
 import { NotificationProvider } from "../context/notification-context";
+import { AnalyticsProvider } from "../components/analytics-provider";
+import { ErrorBoundary } from "../components/error-boundary";
 
 export const metadata: Metadata = {
   title: "Daily Sutra",
@@ -97,37 +99,41 @@ export default function RootLayout({
         />
       </head>
       <body>
-        <ThemeProvider>
-          <CookieConsentProvider>
-            <AppStatusProvider>
-              <AuthProvider>
-                <NotificationProvider>
-                  <SubscriptionProvider>
-                    <ProgressProvider>
-                    <div className="flex min-h-screen flex-col">
-                      <SkipLink />
-                      <KeyboardShortcuts />
-                      <header className="glass-nav sticky top-0 z-20" role="banner">
-                        <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-                          <MainNav />
-                        </div>
-                      </header>
-                      <AppStatusBanner />
-                      <main id="main-content" className="flex-1" role="main">
-                        <div className="mx-auto max-w-5xl px-4 py-8 sm:py-10">
-                          {children}
-                        </div>
-                      </main>
-                      <Footer />
-                      <CookieConsent />
-                    </div>
-                    </ProgressProvider>
-                  </SubscriptionProvider>
-                </NotificationProvider>
-              </AuthProvider>
-            </AppStatusProvider>
-          </CookieConsentProvider>
-        </ThemeProvider>
+        <ErrorBoundary>
+          <ThemeProvider>
+            <CookieConsentProvider>
+              <AppStatusProvider>
+                <AuthProvider>
+                  <NotificationProvider>
+                    <SubscriptionProvider>
+                      <ProgressProvider>
+                        <AnalyticsProvider>
+                          <div className="flex min-h-screen flex-col">
+                            <SkipLink />
+                            <KeyboardShortcuts />
+                            <header className="glass-nav sticky top-0 z-20" role="banner">
+                              <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
+                                <MainNav />
+                              </div>
+                            </header>
+                            <AppStatusBanner />
+                            <main id="main-content" className="flex-1" role="main">
+                              <div className="mx-auto max-w-5xl px-4 py-8 sm:py-10">
+                                {children}
+                              </div>
+                            </main>
+                            <Footer />
+                            <CookieConsent />
+                          </div>
+                        </AnalyticsProvider>
+                      </ProgressProvider>
+                    </SubscriptionProvider>
+                  </NotificationProvider>
+                </AuthProvider>
+              </AppStatusProvider>
+            </CookieConsentProvider>
+          </ThemeProvider>
+        </ErrorBoundary>
       </body>
     </html>
   );

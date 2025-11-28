@@ -68,6 +68,13 @@ function CheckoutSuccessContent() {
           { merge: true }
         );
 
+        // Track purchase in analytics
+        const { trackPurchase } = await import("../../../lib/firebase/analytics");
+        // Get price from Stripe session if available, otherwise use default
+        // Note: In production, you may want to fetch the actual price from the session
+        const price = 49; // Default price - update if your price differs
+        trackPurchase(price, "USD");
+
         setUpdated(true);
       } catch (err: any) {
         logger.warn("Failed to verify or update", err, { action: "verifyPayment", sessionId });

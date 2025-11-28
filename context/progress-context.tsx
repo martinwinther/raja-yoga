@@ -198,6 +198,7 @@ function progressReducer(
 
 export function ProgressProvider({ children }: { children: React.ReactNode }) {
   const [state, dispatch] = React.useReducer(progressReducer, initialState);
+  const prevStateRef = React.useRef<ProgressState>(initialState);
   const { user, loading: authLoading } = useAuth();
   const { setLastError } = useAppStatus();
   const { canAccessDay, status: subscriptionStatus, loading: subscriptionLoading } = useSubscription();
@@ -381,6 +382,43 @@ export function ProgressProvider({ children }: { children: React.ReactNode }) {
     canAccessDay,
     subscriptionStatus,
   ]);
+
+  // Track analytics for practice and week completions
+  React.useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const prevState = prevStateRef.current;
+    
+    // Track practice completions
+    Object.keys(state.dayProgress).forEach((dayKey) => {
+      const dayNumber = Number(dayKey);
+      const current = state.dayProgress[dayNumber];
+      const previous = prevState.dayProgress[dayNumber];
+      
+      // Track when practice is marked as complete (was false, now true)
+      if (current?.didPractice && !previous?.didPractice) {
+        const { getWeekForDay } = require("../data/yogaProgram");
+        const weekNumber = getWeekForDay(dayNumber);
+        const { trackPracticeComplete } = require("../lib/firebase/analytics");
+        trackPracticeComplete(dayNumber, weekNumber);
+      }
+    });
+
+    // Track week completions
+    Object.keys(state.weekProgress).forEach((weekKey) => {
+      const weekNumber = Number(weekKey);
+      const current = state.weekProgress[weekNumber];
+      const previous = prevState.weekProgress[weekNumber];
+      
+      // Track when week is marked as complete (was false, now true)
+      if (current?.completed && !previous?.completed) {
+        const { trackWeekComplete } = require("../lib/firebase/analytics");
+        trackWeekComplete(weekNumber);
+      }
+    });
+
+    prevStateRef.current = state;
+  }, [state]);
 
   const value: ProgressContextValue = React.useMemo(
     () => ({

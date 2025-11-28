@@ -63,6 +63,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       // Send email verification
       await sendEmailVerification(userCredential.user);
+      
+      // Track signup in analytics
+      if (typeof window !== "undefined") {
+        const { trackSignup } = await import("../lib/firebase/analytics");
+        trackSignup("email");
+      }
+      
       // onAuthStateChanged will update user
     } catch (error: any) {
       logger.warn("signUp error", error, { action: "signUp" });
@@ -80,6 +87,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setAuthError(null);
     try {
       await signInWithEmailAndPassword(auth, email, password);
+      
+      // Track login in analytics
+      if (typeof window !== "undefined") {
+        const { trackLogin } = await import("../lib/firebase/analytics");
+        trackLogin("email");
+      }
     } catch (error: any) {
       logger.warn("signIn error", error, { action: "signIn" });
       setAuthError(

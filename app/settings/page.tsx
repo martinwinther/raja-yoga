@@ -253,6 +253,10 @@ export default function SettingsPage() {
         throw new Error("No checkout URL returned.");
       }
 
+      // Track checkout begin
+      const { trackBeginCheckout } = await import("../../lib/firebase/analytics");
+      trackBeginCheckout();
+
       window.location.href = data.url;
     } catch (error: any) {
       logger.warn("Upgrade error", error, { action: "createCheckoutSession", userId: user?.uid });
