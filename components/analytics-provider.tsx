@@ -15,7 +15,7 @@ export function AnalyticsProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { user } = useAuth();
-  const { subscriptionStatus } = useSubscription();
+  const { status: subscriptionStatus } = useSubscription();
 
   // Track page views
   useEffect(() => {
