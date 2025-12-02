@@ -4,7 +4,6 @@ import { Flame } from "lucide-react";
 import { useProgress } from "../context/progress-context";
 import { useAuth } from "../context/auth-context";
 import { calculateStreak } from "../lib/progress-stats";
-import { getCurrentDayNumber } from "../lib/progress-time";
 import { cn } from "../lib/cn";
 
 export function StreakCounter() {
@@ -16,14 +15,13 @@ export function StreakCounter() {
     return null;
   }
 
-  const currentDayNumber = getCurrentDayNumber(settings);
   const streak = calculateStreak({
     dayProgress,
-    currentDayNumber,
+    settings,
   });
 
   // Don't show if no streak and no start date
-  if (streak.count === 0 && !currentDayNumber) {
+  if (streak.count === 0 && !settings.startDate) {
     return null;
   }
 
@@ -50,4 +48,6 @@ export function StreakCounter() {
     </div>
   );
 }
+
+
 
